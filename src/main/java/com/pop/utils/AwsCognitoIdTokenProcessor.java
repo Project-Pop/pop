@@ -3,11 +3,11 @@ package com.pop.utils;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.pop.config.JwtConfiguration;
+import com.pop.models.UserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,19 +25,21 @@ public class AwsCognitoIdTokenProcessor {
 
     public Authentication authenticate(HttpServletRequest request) throws Exception {
         String idToken = request.getHeader(this.jwtConfiguration.getHttpHeader());
+
         if (idToken != null) {
             JWTClaimsSet claims = this.configurableJWTProcessor
                     .process(this.getBearerToken(idToken), null);
             validateIssuer(claims);
             verifyIdToken(claims);
 
-            String username = getUserNameFrom(claims);
+            String userId = getUserIdFrom(claims);
 
-            if (username != null) {
+            if (userId != null) {
 
+                //TODO: fetch user summary from database based on userId.
                 List<GrantedAuthority> grantedAuthorities = of( new SimpleGrantedAuthority("ROLE_USER"));
-                User user = new User(username, "", of());
-                return new JwtAuthentication(user, claims, grantedAuthorities);
+                UserSummary userSummary = new UserSummary("1","Mohit","__mohit__","none");
+                return new JwtAuthentication(userSummary, claims, grantedAuthorities);
 
             }
         }
@@ -46,9 +48,9 @@ public class AwsCognitoIdTokenProcessor {
 
 
 
-    private String getUserNameFrom(JWTClaimsSet claims) {
+    private String getUserIdFrom(JWTClaimsSet claims) {
         return claims.getClaims()
-                .get(this.jwtConfiguration.getUserNameField())
+                .get(this.jwtConfiguration.getUserIdField())
                 .toString();
     }
 

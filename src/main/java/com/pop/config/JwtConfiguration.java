@@ -16,8 +16,7 @@ public class JwtConfiguration {
     private String identityPoolId;
     private String jwkUrl;
     private String region = "ap-south-1";
-    private String userNameField = "cognito:username";
-    private int readTimeout = 2000;
+    private String userIdField = "cognito:username";
     private String httpHeader = "Authorization";
 
     public String getJwkUrl(){
