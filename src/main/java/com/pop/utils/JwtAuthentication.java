@@ -1,15 +1,13 @@
 package com.pop.utils;
 
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.pop.models.UserSummary;
-import lombok.Getter;
+import java.util.Collection;
+
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.security.auth.Subject;
-import java.util.Collection;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.pop.models.UserSummary;
 
-@Getter
 public class JwtAuthentication extends AbstractAuthenticationToken {
 
     private final UserSummary principal;
@@ -26,4 +24,16 @@ public class JwtAuthentication extends AbstractAuthenticationToken {
         return null;
     }
 
+	public JWTClaimsSet getJwtClaimsSet() {
+		return jwtClaimsSet;
+	}
+
+	public void setJwtClaimsSet(JWTClaimsSet jwtClaimsSet) {
+		this.jwtClaimsSet = jwtClaimsSet;
+	}
+
+	public UserSummary getPrincipal() {
+		return principal;
+	}
+    
 }

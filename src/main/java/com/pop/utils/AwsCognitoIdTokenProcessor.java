@@ -24,26 +24,35 @@ public class AwsCognitoIdTokenProcessor {
     private ConfigurableJWTProcessor configurableJWTProcessor;
 
     public Authentication authenticate(HttpServletRequest request) throws Exception {
-        String idToken = request.getHeader(this.jwtConfiguration.getHttpHeader());
-
-        if (idToken != null) {
-            JWTClaimsSet claims = this.configurableJWTProcessor
-                    .process(this.getBearerToken(idToken), null);
-            validateIssuer(claims);
-            verifyIdToken(claims);
-
-            String userId = getUserIdFrom(claims);
-
-            if (userId != null) {
-
-                //TODO: fetch user summary from database based on userId.
-                List<GrantedAuthority> grantedAuthorities = of( new SimpleGrantedAuthority("ROLE_USER"));
-                UserSummary userSummary = new UserSummary("1","Mohit","__mohit__","none");
-                return new JwtAuthentication(userSummary, claims, grantedAuthorities);
-
-            }
-        }
-        return null;
+    	 List<GrantedAuthority> grantedAuthorities = of( new SimpleGrantedAuthority("ROLE_USER"));
+         UserSummary userSummary = new UserSummary("1","Mohit","__mohit__","none");
+         return new JwtAuthentication(userSummary, null, grantedAuthorities);
+//        String idToken = request.getHeader(this.jwtConfiguration.getHttpHeader());
+//
+//        System.out.println(idToken);
+//        if (idToken != null) {
+//        	try {
+//            JWTClaimsSet claims = this.configurableJWTProcessor
+//                    .process(this.getBearerToken(idToken), null);
+//        	} catch (Exception e) {
+//        		
+//				// TODO: handle exception
+//			}
+////            validateIssuer(claims);
+////            verifyIdToken(claims);
+//            
+//            String userId = "!23";
+//            System.out.println(userId);
+//            if (userId != null) {
+//
+//                //TODO: fetch user summary from database based on userId.
+//                List<GrantedAuthority> grantedAuthorities = of( new SimpleGrantedAuthority("ROLE_USER"));
+//                UserSummary userSummary = new UserSummary("1","Mohit","__mohit__","none");
+//                return new JwtAuthentication(userSummary, claims, grantedAuthorities);
+//
+//            }
+//        }
+//        return null;
     }
 
 

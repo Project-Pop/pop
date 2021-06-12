@@ -1,15 +1,15 @@
 package com.pop.controller;
 
-import com.pop.utils.JwtAuthentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SimpleController {
 
+	
+	
     @GetMapping("/api/hello")
-    public String getResp(){
+    public String getResp(){    
         return "Hey authenticated request";
     }
 }

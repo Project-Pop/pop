@@ -11,9 +11,14 @@ import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.Executor;
+
+import javax.sql.DataSource;
 
 import static com.nimbusds.jose.JWSAlgorithm.RS256;
 
@@ -34,6 +39,11 @@ public class PopApplication {
         JWSKeySelector keySelector = new JWSVerificationKeySelector(RS256, keySource);
         jwtProcessor.setJWSKeySelector(keySelector);
         return jwtProcessor;
+    }
+    
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 
 }
