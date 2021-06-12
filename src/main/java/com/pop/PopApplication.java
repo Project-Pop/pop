@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 
 import static com.nimbusds.jose.JWSAlgorithm.RS256;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.pop", "com.pop.config", "com.pop.controller", "com.pop.dao"})
 public class PopApplication {
 
     public static void main(String[] args) {
@@ -41,9 +41,6 @@ public class PopApplication {
         return jwtProcessor;
     }
     
-    @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
-    }
+    
 
 }
