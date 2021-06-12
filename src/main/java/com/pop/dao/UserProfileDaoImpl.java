@@ -47,10 +47,7 @@ public class UserProfileDaoImpl implements UserProfileDao{
 	
 	@Override
 	public void updateUserProfile(UserProfile user) {
-		
 	}
-
-	
 
 	@Override
 	public boolean exists(String phoneNo) {
@@ -60,32 +57,32 @@ public class UserProfileDaoImpl implements UserProfileDao{
 
 	@Override
 	public void increaseViews(String username) {
-		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE UserProfile SET views = views + 1 where username = ?";
+		jt.update(sql, username);
 	}
 
 	@Override
 	public void increaseReacts(String username) {
-		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE UserProfile SET reacts = reacts + 1 where username = ?";
+		jt.update(sql, username);
 	}
 
 	@Override
 	public void increasePopScore(String username) {
-		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE UserProfile SET popScore = popScore + 1 where username = ?";
+		jt.update(sql, username);		
 	}
 
 	@Override
-	public void setPopScore(String username) {
-		// TODO Auto-generated method stub
-		
+	public void setPopScore(String username, int popScore) {
+		String sql = "UPDATE UserProfile SET popScore = ? where username = ?";
+		jt.update(sql, username);				
 	}
 
 	@Override
 	public void decreasePopScore(String username) {
-		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE UserProfile SET popScore = popScore - 1 where username = ?";
+		jt.update(sql, username);			
 	}
 
 

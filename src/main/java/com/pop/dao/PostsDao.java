@@ -6,13 +6,15 @@ import com.pop.models.Posts;
 
 public interface PostsDao {
 	public void createPost(Posts post);
+	// We have to add logic to get all tagged in this query only using join. Will add that when we will have some data
+	// Similarly adding reaction Count logic 
 	public Posts getPostByPostId(String postId);
 	public List<Posts> getPostUploadedByUsername(String username);
 	public List<Posts> getMyTaggedPostsByUsername(String username);
-	public void declinePost(String postId);
-	public void acceptPost(String postId);
-	public void tagByUsername(String username);
-	public void reactToPost(String username, String reactionString);
+	public void declinePost(String postId, String username);
+	public void acceptPost(String postId, String username);
+	public void tagByUsername(String postId, String username);
+	public void reactToPost(String username, String reactionString,  String postId);
 	public void removeFromTaggedPost(String username, String postId);
 	// we have to create one more table for deleted posts
 	public void deletePost(String postId); 	

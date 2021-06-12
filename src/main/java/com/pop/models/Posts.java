@@ -1,6 +1,8 @@
 package com.pop.models;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -11,19 +13,20 @@ public class Posts {
 	String imageUrl;
 	@NotNull
 	String username;
+	List<Reactions> reactions;  
 	String views;
-	Date date;
+	Date timeStamp;
 	int likeCount = 0;
 	
 	UserProfile user;
 	
-	public Posts(String postId, @NotNull String imageUrl, @NotNull String username, String views, Date date, UserProfile user, int likeCount) {
+	public Posts(String postId, @NotNull String imageUrl, @NotNull String username, String views, Date timeStamp, UserProfile user, int likeCount) {
 		super();
 		this.postId = postId;
 		this.imageUrl = imageUrl;
 		this.username = username;
 		this.views = views;
-		this.date = date;
+		this.timeStamp = timeStamp;
 		this.user = user;
 		this.likeCount = likeCount;
 	}
@@ -74,12 +77,18 @@ public class Posts {
 	public void setViews(String views) {
 		this.views = views;
 	}
-	public Date getDate() {
-		return date;
+	public Date getTimeStamp() {
+		return timeStamp;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+	public void setTimeStamp(Date timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 	
-	
+	public List<Reactions> getReactions() {
+		return reactions;
+	}
+
+	public void setReactions(List<Reactions> reactions) {
+		this.reactions = reactions;
+	}
 }

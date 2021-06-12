@@ -14,6 +14,6 @@ public interface UserProfileDao {
 	public void increaseViews(String username);
 	public void increaseReacts(String username);
 	public void increasePopScore(String username);
-	public void setPopScore(String username);
+	public void setPopScore(String username, int popScore);
 	public void decreasePopScore(String username);
 }
