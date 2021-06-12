@@ -6,6 +6,7 @@ import com.pop.models.Comments;
 
 public interface CommentsDao {
 	public void addComment(Comments comment);
+	public void editComment(String commentId, String message);
 	public void deleteComment(String commentId);
 	public List<Comments> getCommentsByPost(String postId);
 	public void reactToComment(String commentId, String reactionString);

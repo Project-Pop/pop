@@ -6,22 +6,18 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class User {
-	private int user_id;
-	@NotNull
-	@Size(min=3, max = 25)
+	private String userId;
     private String username;
-	@Size(min = 3, max = 50)
 	private String fullname;
-	@Size(max = 100)
     private String email;
-	@NotNull
 	private String phone;	
 	private Date dob;
-	
-	public User(int user_id, @NotNull @Size(min = 3, max = 25) String username,
-			@Size(min = 3, max = 50) String fullname, @Size(max = 100) String email, @NotNull String phone, Date dob) {
+	public User() {
+		
+	}
+	public User(String userId, String username, String fullname, String email, String phone, Date dob) {
 		super();
-		this.user_id = user_id;
+		this.userId = userId;
 		this.username = username;
 		this.fullname = fullname;
 		this.email = email;
@@ -29,11 +25,17 @@ public class User {
 		this.dob = dob;
 	}
 	
-	public int getUser_id() {
-		return user_id;
+	@Override
+	public String toString() {
+		return "User [user_id=" + userId + ", username=" + username + ", fullname=" + fullname + ", email=" + email
+				+ ", phone=" + phone + ", dob=" + dob + "]";
 	}
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	public String getUsername() {
 		return username;

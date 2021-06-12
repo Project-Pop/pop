@@ -4,10 +4,13 @@ import java.util.List;
 
 import com.pop.models.User;
 
+
 public interface UserDao { 
 	public List<User> getAll();
 	public User getUserByUserId(String userId);
 	public boolean exists(String phoneNo);
+	public boolean isUserNameAvailable(String username);
+
 	public User getUserByEmailAddress(String emailAddress);
 	public User getUserByUsername(String username);
 	

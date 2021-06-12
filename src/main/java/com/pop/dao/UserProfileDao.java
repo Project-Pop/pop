@@ -6,14 +6,14 @@ import com.pop.models.UserProfile;
 
 public interface UserProfileDao {
 	public List<UserProfile> getAll();
-	public UserProfile get(int userId);
 	public boolean exists(String phoneNo);
-	public UserProfile findByEmailAddress(String emailAddress);
-	public UserProfile findByUsername(String username);
+	public UserProfile getUserProfileByUsername(String username);
+	// unimplemented
 	public void updateUserProfile(UserProfile user);
-	public void increaseViews();
-	public void increaseReacts();
-	public void increasePopScore();
-	public void setPopScore();
-	public void decreasePopScore();
+	public void updateImageUrl(String imageUrl, String username);
+	public void increaseViews(String username);
+	public void increaseReacts(String username);
+	public void increasePopScore(String username);
+	public void setPopScore(String username);
+	public void decreasePopScore(String username);
 }
