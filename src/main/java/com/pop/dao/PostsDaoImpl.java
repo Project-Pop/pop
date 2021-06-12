@@ -86,6 +86,12 @@ public class PostsDaoImpl implements PostsDao{
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public String getOwnerOfPost(String postId) {
+		String sql = "SELECT username FROM Posts where postId = ?";
+		return jt.queryForObject(sql, new BeanPropertyRowMapper<>(String.class), postId);
+	}
+
 	
 
 }

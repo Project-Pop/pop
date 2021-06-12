@@ -19,4 +19,5 @@ public interface PostsDao {
 	// we have to create one more table for deleted posts
 	public void deletePost(String postId); 	
 	public void reportPost(String postId, String message);
+	public String  getOwnerOfPost(String postId);
 }
