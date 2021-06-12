@@ -10,21 +10,34 @@ public class Posts {
 	@NotNull
 	String imageUrl;
 	@NotNull
-	String userId;
+	String username;
 	String views;
 	Date date;
+	int likeCount = 0;
 	
 	UserProfile user;
 	
-	public Posts(String postId, @NotNull String imageUrl, @NotNull String userId, String views, Date date, UserProfile user) {
+	public Posts(String postId, @NotNull String imageUrl, @NotNull String username, String views, Date date, UserProfile user, int likeCount) {
 		super();
 		this.postId = postId;
 		this.imageUrl = imageUrl;
-		this.userId = userId;
+		this.username = username;
 		this.views = views;
 		this.date = date;
 		this.user = user;
+		this.likeCount = likeCount;
 	}
+	
+
+	public int getLikeCount() {
+		return likeCount;
+	}
+
+
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
+	}
+
 
 	public String getPostId() {
 		return postId;
@@ -38,12 +51,23 @@ public class Posts {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
-	public String getUserId() {
-		return userId;
+
+	public String getUsername() {
+		return username;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
+	
+	public UserProfile getUser() {
+		return user;
+	}
+	
+	public void setUser(UserProfile user) {
+		this.user = user;
+	}
+
 	public String getViews() {
 		return views;
 	}

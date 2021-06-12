@@ -4,27 +4,30 @@ import javax.validation.constraints.NotNull;
 
 public class UserReactions {
 	@NotNull
-	String userId;
+	String username;
 	@NotNull
 	String postId;
 	@NotNull
 	String reactionString;
 	UserProfile user;
 	
-	public UserReactions(@NotNull String userId, @NotNull String postId, @NotNull String reactionString,
+	public UserReactions(@NotNull String username, @NotNull String postId, @NotNull String reactionString,
 			UserProfile user) {
 		super();
-		this.userId = userId;
+		this.username = username;
 		this.postId = postId;
 		this.reactionString = reactionString;
 		this.user = user;
 	}
-	public String getUserId() {
-		return userId;
+	
+	public String getUsername() {
+		return username;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
+
 	public String getPostId() {
 		return postId;
 	}

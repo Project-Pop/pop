@@ -4,7 +4,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class UserProfile {
-	private int user_id;
 	@NotNull
 	@Size(min=3, max = 25)
     private String username;
@@ -16,19 +15,13 @@ public class UserProfile {
 	public UserProfile(int user_id, @NotNull @Size(min = 3, max = 25) String username, int views, int reacts,
 			int popScore, User user) {
 		super();
-		this.user_id = user_id;
 		this.username = username;
 		this.views = views;
 		this.reacts = reacts;
 		this.popScore = popScore;
 		this.user = user;
 	}
-	public int getUser_id() {
-		return user_id;
-	}
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
-	}
+	
 	public String getUsername() {
 		return username;
 	}
