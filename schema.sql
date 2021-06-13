@@ -1,4 +1,3 @@
-drop database pop;
 create database pop;
 use pop;
 CREATE TABLE Users (
