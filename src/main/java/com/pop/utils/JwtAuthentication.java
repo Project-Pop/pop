@@ -1,19 +1,18 @@
 package com.pop.utils;
 
-import java.util.Collection;
-
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.pop.models.User;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.pop.models.UserSummary;
+import java.util.Collection;
 
 public class JwtAuthentication extends AbstractAuthenticationToken {
 
-    private final UserSummary principal;
+    private final User principal;
     private JWTClaimsSet jwtClaimsSet;
 
-    public JwtAuthentication(UserSummary principal, JWTClaimsSet jwtClaimsSet, Collection<? extends GrantedAuthority> authorities){
+    public JwtAuthentication(User principal, JWTClaimsSet jwtClaimsSet, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         this.jwtClaimsSet = jwtClaimsSet;
@@ -24,16 +23,16 @@ public class JwtAuthentication extends AbstractAuthenticationToken {
         return null;
     }
 
-	public JWTClaimsSet getJwtClaimsSet() {
-		return jwtClaimsSet;
-	}
+    public JWTClaimsSet getJwtClaimsSet() {
+        return jwtClaimsSet;
+    }
 
-	public void setJwtClaimsSet(JWTClaimsSet jwtClaimsSet) {
-		this.jwtClaimsSet = jwtClaimsSet;
-	}
+    public void setJwtClaimsSet(JWTClaimsSet jwtClaimsSet) {
+        this.jwtClaimsSet = jwtClaimsSet;
+    }
 
-	public UserSummary getPrincipal() {
-		return principal;
-	}
-    
+    public User getPrincipal() {
+        return principal;
+    }
+
 }

@@ -3,7 +3,7 @@ package com.pop.utils;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.pop.config.JwtConfiguration;
-import com.pop.models.UserSummary;
+import com.pop.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import static java.util.List.of;
 
@@ -25,8 +26,8 @@ public class AwsCognitoIdTokenProcessor {
 
     public Authentication authenticate(HttpServletRequest request) throws Exception {
     	 List<GrantedAuthority> grantedAuthorities = of( new SimpleGrantedAuthority("ROLE_USER"));
-         UserSummary userSummary = new UserSummary("1","Mohit","__mohit__","none");
-         return new JwtAuthentication(userSummary, null, grantedAuthorities);
+        User user = new User("1","__mohit__","Mohit","mohit@gmail.com","+91", new Date());
+         return new JwtAuthentication(user, null, grantedAuthorities);
 //        String idToken = request.getHeader(this.jwtConfiguration.getHttpHeader());
 //
 //        System.out.println(idToken);
