@@ -93,5 +93,12 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	
+	@Override
+	public String getUsernameByUserId(String userId) {
+		 String sql = "SELECT username FROM Users WHERE userId = ?";
+         return  jt.queryForObject(sql,
+                 new BeanPropertyRowMapper<String>(String.class), userId);
+	}
+
 	
 }

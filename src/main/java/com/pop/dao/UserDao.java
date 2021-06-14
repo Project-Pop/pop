@@ -10,9 +10,10 @@ public interface UserDao {
 	public User getUserByUserId(String userId);
 	public boolean exists(String phoneNo);
 	public boolean isUserNameAvailable(String username);
+	public String getUsernameByUserId(String username);
 
 	public User getUserByEmailAddress(String emailAddress);
-	public User getUserByUsername(String username);
+	public User getUserByUsername(String userId);
 	
 	// Update User only email or dob can be udpated
 	public void updateUser(User user);

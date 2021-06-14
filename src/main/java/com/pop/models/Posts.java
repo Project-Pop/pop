@@ -17,7 +17,6 @@ public class Posts {
 	String views;
 	Date timeStamp;
 	int likeCount = 0;
-	
 	UserProfile user;
 	
 	public Posts(String postId, @NotNull String imageUrl, @NotNull String username, String views, Date timeStamp, UserProfile user, int likeCount) {

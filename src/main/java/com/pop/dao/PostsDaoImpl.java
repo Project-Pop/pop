@@ -21,7 +21,7 @@ public class PostsDaoImpl implements PostsDao{
 	}
 	
 	public List<Reactions> getReactions(String postId) {
-		String sql = "SELECT reactionString, count(*) FROM UserReactions where postId = ? GROUP BY reactionString";
+		String sql = "SELECT reactionString, count(reactionString) FROM UserReactions where postId = ? GROUP BY reactionString";
 		return jt.query(sql, new BeanPropertyRowMapper<Reactions>(Reactions.class));
 	}
 	
