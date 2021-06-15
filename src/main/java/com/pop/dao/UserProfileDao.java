@@ -9,6 +9,7 @@ public interface UserProfileDao {
 	public boolean exists(String phoneNo);
 	public UserProfile getUserProfileByUsername(String username);
 	// unimplemented
+	public String getProfileImageUrl(String username);
 	public void updateUserProfile(UserProfile user);
 	public void updateImageUrl(String imageUrl, String username);
 	public void increaseViews(String username);

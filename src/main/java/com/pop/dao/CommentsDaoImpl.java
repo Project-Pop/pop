@@ -52,7 +52,7 @@ public class CommentsDaoImpl implements CommentsDao{
 
 	@Override
 	public void unlike(String commentId, String username) {
-		String sql = "DELETE FROM CommentsReactionCounter where commentId = ?, username = ?";
+		String sql = "DELETE FROM CommentsReactionCounter where commentId = ? AND username = ?";
 		jt.update(sql, commentId, username);
 		sql = "UPDATE Comments SET likeCount= likeCount - 1 WHERE commentId = ?";
 		jt.update(sql, commentId);

@@ -51,7 +51,11 @@
 		    <groupId>javax.validation</groupId>
 		    <artifactId>validation-api</artifactId>
 		</dependency>
-				
+		<dependency>
+		    <groupId>com.amazonaws</groupId>
+		    <artifactId>aws-java-sdk</artifactId>
+		    <version>1.11.486</version>
+		</dependency>
 
         <!--		test dependencies-->
         <dependency>

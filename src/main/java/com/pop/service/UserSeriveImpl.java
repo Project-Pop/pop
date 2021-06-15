@@ -1,5 +1,7 @@
 package com.pop.service;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.pop.common.Response;
 import com.pop.dao.UserDao;
@@ -23,6 +26,9 @@ public class UserSeriveImpl implements UserService {
     
     @Autowired
     private UserProfileDao userProfileDao;
+    
+    @Autowired
+    private StorageService storageService;
 
     @Override
     public Response isUsernameAvailable(String username) {
@@ -107,5 +113,20 @@ public class UserSeriveImpl implements UserService {
 	    	return new Response(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return Response.ok("Succedeed", 400);
+	}
+
+	@Override
+	public void updateUserImage(MultipartFile image, MultipartFile miniImage) {
+		var principalUser = (UsernameDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String myUsername = principalUser.getUsername();
+        String imageUrl = userProfileDao.getProfileImageUrl(myUsername);
+//        System.out.println(imageUrl.length());
+        if(imageUrl != null && imageUrl.length() != 0){
+        	storageService.deleteFile(imageUrl);
+        }
+        imageUrl = UUID.randomUUID().toString();
+        storageService.uploadFile(image, imageUrl);
+        storageService.uploadFile(miniImage, myUsername);
+        userProfileDao.updateImageUrl(imageUrl, myUsername);
 	}
 }

@@ -1,5 +1,7 @@
 package com.pop.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.pop.common.Response;
 import com.pop.dto.*;
 
@@ -7,7 +9,7 @@ public interface PostService {
 
 //    public Response getGlobalFeed();
 
-    public Response createPost(NewPostDto newPostDto);
+    public Response createPost(NewPostDto newPostDto, MultipartFile normalImage, MultipartFile miniImage);
 
 //    public Response getHomeFeed();
 

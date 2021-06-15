@@ -8,6 +8,7 @@ import com.pop.models.User;
 import com.pop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +28,11 @@ public class UserController {
     		response.sendError(res.getCode(), res.getError());
     	}
     	else response.setStatus(res.getCode());
+    }
+    
+    @PostMapping("/updateImage")
+    void uploadImage(MultipartFile image, MultipartFile miniImage) {
+    	userService.updateUserImage(image, miniImage);
     }
     
 

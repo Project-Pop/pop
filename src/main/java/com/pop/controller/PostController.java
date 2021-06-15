@@ -8,6 +8,7 @@ import com.pop.service.CommentService;
 import com.pop.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,9 +30,9 @@ public class PostController {
     }
 
     @PostMapping("/")
-    NewPostDto postPost(@RequestBody NewPostDto newPostDto, HttpServletResponse response) throws IOException {
-
-        Response res = postService.createPost(newPostDto);
+    public NewPostDto postPost(@RequestBody NewPostDto newPostDto, MultipartFile image, MultipartFile miniImage, HttpServletResponse response) throws IOException {
+    	
+        Response res = postService.createPost(newPostDto, image, miniImage);
         if (res.isContainsError()) {
             response.sendError(res.getCode(), res.getError());
         } else {

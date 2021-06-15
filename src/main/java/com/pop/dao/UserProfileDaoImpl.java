@@ -112,5 +112,11 @@ public class UserProfileDaoImpl implements UserProfileDao{
 		jt.update(sql, followerUsername);
 	}
 
+	@Override
+	public String getProfileImageUrl(String username) {
+		String sql = "SELECT imageUrl FROM UserProfile where username = ?";
+		return jt.queryForObject(sql, new BeanPropertyRowMapper<>(String.class), username);
+	}
+
 
 }

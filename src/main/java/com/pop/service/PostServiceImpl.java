@@ -8,6 +8,8 @@ import com.pop.models.Tagged;
 import com.pop.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -15,12 +17,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
+@Service
 public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostsDao postsDao;
-
+    
+    @Autowired
+    private StorageService storageService;
 
     public boolean amITheOwnerOfThisPost(String postId) {
         var principalUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -29,7 +33,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Response createPost(NewPostDto newPostDto) {
+    public Response createPost(NewPostDto newPostDto, MultipartFile image, MultipartFile minImage) {
 
         String principalUsername = ((UsernameDto) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal())
@@ -45,6 +49,7 @@ public class PostServiceImpl implements PostService {
                     new Date(),
                     0
             );
+            storageService.uploadFile(image, newPost.getPostId());
             newPost.setTaggedUsers(newPostDto.getTaggedUsers().stream().map(usernameDto -> new Tagged(usernameDto.getUsername(), newPost.getPostId())).collect(Collectors.toList()));
             postsDao.createPost(newPost);
             return new Response(newPost, "post created successfully", HttpServletResponse.SC_CREATED);
