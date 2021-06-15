@@ -11,7 +11,5 @@ public interface CommentsDao {
 	public List<Comments> getCommentsByPost(String postId);
 	public void like(String commentId, String username);
 	public void unlike(String commentId, String username);
-
-	public void removeReaction(String commentId, String username);
 	public String getCommentOwner(String commentId);
 }

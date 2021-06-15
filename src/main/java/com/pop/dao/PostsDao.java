@@ -8,7 +8,7 @@ public interface PostsDao {
 	public void createPost(Posts post);
 	// We have to add logic to get all tagged in this query only using join. Will add that when we will have some data
 	// Similarly adding reaction Count logic 
-	public Posts getPostByPostId(String postId);
+	public Posts getPostByPostId(String postId,  boolean approvedStatus);
 	public List<Posts> getPostUploadedByUsername(String username);
 	public List<Posts> getMyTaggedPostsByUsername(String username);
 	public void declinePost(String postId, String username);

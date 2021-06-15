@@ -30,16 +30,21 @@ public class PostsDaoImpl implements PostsDao{
 	}
 	
 	@Override
-	public Posts getPostByPostId(String postId) {
+	public Posts getPostByPostId(String postId,  boolean approvedStatus) {
 		String sql = "Select * from Posts where postId = ?";
 		Posts p = jt.queryForObject(sql, new BeanPropertyRowMapper<Posts>(Posts.class), postId);
 		p.setReactions(getReactions(postId));
 
-//		p.setTaggedUsers(
-//				// onlyApproved: if true, only fetch tags which are approved
-//				(List<Tagged>)	getTagsOfPost(postId,  onlyApproved: true)
-//		);
+		p.setTaggedUsers(
+				// onlyApproved: if true, only fetch tags which are approved
+				(List<Tagged>)	getTaggedUser(postId, approvedStatus)
+		);
 		return p;
+	}
+	
+	public List<Tagged> getTaggedUser(String postId, boolean approvedStatus) {
+		String sql = "SELECT * from Tagged where postId = ? ANDapprovalStatus = ?";
+		return jt.query(sql, new BeanPropertyRowMapper<Tagged>(Tagged.class), postId, approvedStatus);	
 	}
 	
 	@Override

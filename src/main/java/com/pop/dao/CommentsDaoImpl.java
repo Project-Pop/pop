@@ -46,12 +46,16 @@ public class CommentsDaoImpl implements CommentsDao{
 	public void like(String commentId, String username) {
 		String sql = "INSERT INTO CommentsReactionCounter values (?, ?)";
 		jt.update(sql, commentId, username);
+		sql = "UPDATE Comments SET likeCount= likeCount + 1 WHERE commentId = ?";
+		jt.update(sql, commentId);
 	}
 
 	@Override
-	public void removeReaction(String commentId, String username) {
+	public void unlike(String commentId, String username) {
 		String sql = "DELETE FROM CommentsReactionCounter where commentId = ?, username = ?";
 		jt.update(sql, commentId, username);
+		sql = "UPDATE Comments SET likeCount= likeCount - 1 WHERE commentId = ?";
+		jt.update(sql, commentId);
 	}
 
 	@Override
@@ -60,11 +64,7 @@ public class CommentsDaoImpl implements CommentsDao{
 		return jt.queryForObject(sql, new BeanPropertyRowMapper<>(String.class), commentId);
 	}
 
-	@Override
-	public void unlike(String commentId, String username) {
-		String sql = "DELETE FROM CommentsReactionCounter WHERE commentId = ? AND username = ?";
-		jt.update(sql, commentId, username);		
-	}
+	
 
 
 }
