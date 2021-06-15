@@ -19,8 +19,8 @@ public class PostsDaoImpl implements PostsDao{
 	
 	@Override
 	public void createPost(Posts post) {
-		String sql = "INSERT INTO Posts (postId, imageUrl, username, timeStamp) values (?, ?, ?, ?)";
-		jt.update(sql, post.getPostId(), post.getImageUrl(), post.getUsername(), post.getTimeStamp());
+		String sql = "INSERT INTO Posts (postId, imageUrl, username, timeStamp, description) values (?, ?, ?, ?, ?)";
+		jt.update(sql, post.getPostId(), post.getImageUrl(), post.getUsername(), post.getTimeStamp(), post.getDescription());
 		tagMultipleUsers(post.getPostId(),post.getTaggedUsers().stream().map(UsernameDto::getUsername).collect(Collectors.toList()));
 	}
 	
@@ -43,7 +43,7 @@ public class PostsDaoImpl implements PostsDao{
 	}
 	
 	public List<Tagged> getTaggedUser(String postId, boolean approvedStatus) {
-		String sql = "SELECT * from Tagged where postId = ? ANDapprovalStatus = ?";
+		String sql = "SELECT * from Tagged where postId = ? AND approvalStatus = ?";
 		return jt.query(sql, new BeanPropertyRowMapper<Tagged>(Tagged.class), postId, approvedStatus);	
 	}
 	

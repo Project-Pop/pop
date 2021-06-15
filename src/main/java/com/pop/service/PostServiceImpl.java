@@ -71,7 +71,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Response getPostDetails(String postId) {
         try {
-            Posts post = postsDao.getPostByPostId(postId);
+            Posts post = postsDao.getPostByPostId(postId, false);
             return new Response(post,"Post fetched",HttpServletResponse.SC_OK);
         } catch (Exception err) {
             return Response.error(err.toString(), HttpServletResponse.SC_BAD_REQUEST);

@@ -16,24 +16,22 @@ CREATE TABLE UserProfile(
     popScore int default(0),
     followers int default(0),
     following int default(0),
+    bio VARCHAR(1000),
     FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE
 );
 
-ALTER TABLE UserProfile 
-ADD COLUMN followers int default(0);
-
-ALTER TABLE UserProfile
-ADD COLUMN following int default(0);
 
 CREATE TABLE Posts(
 	postId CHAR(36) PRIMARY KEY,
     imageUrl varchar(100),
     username VARCHAR(25),
     views INT DEFAULT(0),
+    description VARCHAR(300),
     timeStamp date,
 	FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
     INDEX (username)
 );
+
 CREATE TABLE UserReactions(
 	username VARCHAR(25),
     postId CHAR(36),
