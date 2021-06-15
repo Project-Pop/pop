@@ -9,7 +9,9 @@ public interface CommentsDao {
 	public void editComment(String commentId, String message);
 	public void deleteComment(String commentId);
 	public List<Comments> getCommentsByPost(String postId);
-	public void reactToComment(String commentId, String username);
+	public void like(String commentId, String username);
+	public void unlike(String commentId, String username);
+
 	public void removeReaction(String commentId, String username);
 	public String getCommentOwner(String commentId);
 }

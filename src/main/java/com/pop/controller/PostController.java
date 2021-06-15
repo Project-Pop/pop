@@ -1,13 +1,24 @@
 package com.pop.controller;
 
+import com.pop.common.Response;
 import com.pop.dto.*;
+import com.pop.models.Comments;
+import com.pop.service.CommentService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/v1/posts")
 public class PostController {
+	
+	@Autowired
+	private CommentService commentService;
 
     @GetMapping("/")
     void getGlobalFeed( HttpServletResponse response) {
@@ -69,30 +80,60 @@ public class PostController {
 
 
     @GetMapping("/{postId}/comments")
-    void getCommentsOnPost(@PathVariable String postId, HttpServletResponse response) {
-        return;
+    public List<Comments> getCommentsOnPost(@PathVariable String postId, HttpServletResponse response) throws IOException {
+        Response res = commentService.getCommentsOnPost(postId);
+        if(res.isContainsError()) {
+        	response.sendError(res.getCode(), res.getMessage());
+        	return null;
+        }
+    	return (List<Comments>) res.getData();
     }
 
     @PostMapping("/{postId}/comments")
-    void commentOnPost(@PathVariable String postId, @RequestBody CommentDto commentDto, HttpServletResponse response) {
-        return;
+    void commentOnPost(@PathVariable String postId, @RequestBody CommentDto commentDto, HttpServletResponse response) throws IOException {
+        Response res = commentService.commentOnPost(postId, commentDto);
+        if(res.isContainsError()) {
+        	response.sendError(res.getCode(), res.getMessage());
+        }
+        else response.setStatus(res.getCode());
     }
 
     @PatchMapping("/{postId}/comments/{commentId}")
-    void editComment(@PathVariable String postId, @PathVariable String commentId, @RequestBody CommentDto commentDto, HttpServletResponse response) {
-        return;
+    void editComment(@PathVariable String commentId, @RequestBody CommentDto commentDto, HttpServletResponse response) throws IOException {
+    	Response res = commentService.editComment(commentId, commentDto);
+        if(res.isContainsError()) {
+        	response.sendError(res.getCode(), res.getMessage());
+        }
+        else response.setStatus(res.getCode());
     }
 
 
     @DeleteMapping("/{postId}/comments/{commentId}")
-    void deleteComment(@PathVariable String postId, @PathVariable String commentId, HttpServletResponse response) {
-        return;
+    void deleteComment(@PathVariable String postId, @PathVariable String commentId, HttpServletResponse response) throws IOException {
+    	Response res = commentService.deleteComment(commentId);
+        if(res.isContainsError()) {
+        	response.sendError(res.getCode(), res.getMessage());
+        }
+        else response.setStatus(res.getCode());
     }
 
 
-    @PostMapping("/{postId}/comments/{commentId}/reactions")
-    void reactOnComment(@PathVariable String postId,@PathVariable String commentId, HttpServletResponse response) {
-        return;
+    @PostMapping("/{postId}/comments/{commentId}/like")
+    void likeCommnent(@PathVariable String postId,@PathVariable String commentId, HttpServletResponse response) throws IOException {
+    	Response res = commentService.like(commentId);
+        if(res.isContainsError()) {
+        	response.sendError(res.getCode(), res.getMessage());
+        }
+        else response.setStatus(res.getCode());;
     }
-
+    
+    @PostMapping("/{postId}/comments/{commentId}/unlike")
+    void unlikeCommnent(@PathVariable String postId,@PathVariable String commentId, HttpServletResponse response) throws IOException {
+    	Response res = commentService.unlike(commentId);
+        if(res.isContainsError()) {
+        	response.sendError(res.getCode(), res.getMessage());
+        }
+        else response.setStatus(res.getCode());;
+    }
+    
 }

@@ -9,10 +9,12 @@ public interface CommentService {
 
     public Response commentOnPost(String postId, CommentDto commentDto);
 
-    public Response editComment(String postId, String commentId, CommentDto commentDto);
+    public Response editComment(String commentId, CommentDto commentDto);
 
-    public Response deleteComment(String postId, String commentId);
+    public Response deleteComment(String commentId);
 
-    public Response reactOnComment(String postId, String commentId);
+    public Response like(String commentId);
+
+    public Response unlike(String commentId);
 
 }
