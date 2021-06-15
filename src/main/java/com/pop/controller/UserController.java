@@ -5,7 +5,6 @@ import com.pop.dto.PatchUserDto;
 import com.pop.dto.SignUpUserDto;
 import com.pop.dto.UsernameDto;
 import com.pop.models.User;
-import com.pop.models.UserProfile;
 import com.pop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

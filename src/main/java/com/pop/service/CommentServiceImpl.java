@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
 			comments = commentsDao.getCommentsByPost(postId);
 		}catch (Exception e) {
 			System.out.println(e.getCause());
-			return new Response(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
+			return Response.error(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return new Response(comments, "CommentsFetched", HttpServletResponse.SC_OK);
 	}
@@ -47,7 +47,7 @@ public class CommentServiceImpl implements CommentService {
 	    try {
 	    	commentsDao.addComment(comment);
 	    }catch (Exception e) {
-			return new Response(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
+			return Response.error(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return Response.ok("Comment Added", HttpServletResponse.SC_OK);
 	}
@@ -56,12 +56,12 @@ public class CommentServiceImpl implements CommentService {
 	public Response editComment(String commentId, CommentDto commentDto) {
 	    
 		if(amITheOwnerOfThisComment(commentId)==false) {
-			return new Response("You cannot edit this", HttpServletResponse.SC_FORBIDDEN);
+			return Response.error("You cannot edit this", HttpServletResponse.SC_FORBIDDEN);
 		}
 		try {
 			commentsDao.editComment(commentId, commentDto.getMessage());
 		}catch (Exception e) {
-			return new Response(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
+			return Response.error(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return Response.ok("Comment Edited", HttpServletResponse.SC_OK);
 	}
@@ -69,13 +69,13 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public Response deleteComment(String commentId) {
 		if(amITheOwnerOfThisComment(commentId) == false) {
-			return new Response("You cannot edit this", HttpServletResponse.SC_FORBIDDEN);
+			return  Response.error("You cannot edit this", HttpServletResponse.SC_FORBIDDEN);
 		}
 		try {
 			commentsDao.deleteComment(commentId);
 		}
 		catch (Exception e) {
-			return new Response(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
+			return Response.error(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return Response.ok("Comment Deleted", HttpServletResponse.SC_OK);
 	}
@@ -87,7 +87,7 @@ public class CommentServiceImpl implements CommentService {
 		try {
 			commentsDao.like(commentId, username);
 		}catch (Exception e) {
-			return new Response(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
+			return Response.error(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return Response.ok("Comment Liked", HttpServletResponse.SC_OK);	}
 	@Override
@@ -97,7 +97,7 @@ public class CommentServiceImpl implements CommentService {
 		try {
 			commentsDao.unlike(commentId, username);;
 		}catch (Exception e) {
-			return new Response(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
+			return Response.error(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return Response.ok("Comment Unliked", HttpServletResponse.SC_OK);	
 	}	
