@@ -3,7 +3,7 @@ package com.pop.dto;
 public class UsernameDto {
     private String username;
 
-    UsernameDto(String username){
+    public UsernameDto(String username){
         this.username = username;
     }
 

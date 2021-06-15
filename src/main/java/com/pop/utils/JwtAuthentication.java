@@ -1,7 +1,7 @@
 package com.pop.utils;
 
 import com.nimbusds.jwt.JWTClaimsSet;
-import com.pop.models.User;
+import com.pop.dto.UsernameDto;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -9,10 +9,10 @@ import java.util.Collection;
 
 public class JwtAuthentication extends AbstractAuthenticationToken {
 
-    private final User principal;
+    private final UsernameDto principal;
     private JWTClaimsSet jwtClaimsSet;
 
-    public JwtAuthentication(User principal, JWTClaimsSet jwtClaimsSet, Collection<? extends GrantedAuthority> authorities) {
+    public JwtAuthentication(UsernameDto principal, JWTClaimsSet jwtClaimsSet, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         this.jwtClaimsSet = jwtClaimsSet;
@@ -31,7 +31,7 @@ public class JwtAuthentication extends AbstractAuthenticationToken {
         this.jwtClaimsSet = jwtClaimsSet;
     }
 
-    public User getPrincipal() {
+    public UsernameDto getPrincipal() {
         return principal;
     }
 

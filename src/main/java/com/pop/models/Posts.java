@@ -1,5 +1,7 @@
 package com.pop.models;
 
+import com.pop.dto.UsernameDto;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,20 +15,26 @@ public class Posts {
 	String imageUrl;
 	@NotNull
 	String username;
-	List<Reactions> reactions;  
-	String views;
+
+
+	String description;
+
+	List<Reactions> reactions;
+
+	List<Tagged> taggedUsers;
+
+	int views;
 	Date timeStamp;
 	int likeCount = 0;
-	UserProfile user;
-	
-	public Posts(String postId, @NotNull String imageUrl, @NotNull String username, String views, Date timeStamp, UserProfile user, int likeCount) {
+
+	public Posts(String postId, @NotNull String imageUrl, @NotNull String username, String description, int views, Date timeStamp, int likeCount) {
 		super();
 		this.postId = postId;
 		this.imageUrl = imageUrl;
 		this.username = username;
+		this.description  = description;
 		this.views = views;
 		this.timeStamp = timeStamp;
-		this.user = user;
 		this.likeCount = likeCount;
 	}
 	
@@ -61,19 +69,20 @@ public class Posts {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
-	public UserProfile getUser() {
-		return user;
-	}
-	
-	public void setUser(UserProfile user) {
-		this.user = user;
+
+
+	public String getDescription() {
+		return description;
 	}
 
-	public String getViews() {
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getViews() {
 		return views;
 	}
-	public void setViews(String views) {
+	public void setViews(int views) {
 		this.views = views;
 	}
 	public Date getTimeStamp() {
@@ -89,5 +98,13 @@ public class Posts {
 
 	public void setReactions(List<Reactions> reactions) {
 		this.reactions = reactions;
+	}
+
+	public List<Tagged> getTaggedUsers() {
+		return taggedUsers;
+	}
+
+	public void setTaggedUsers(List<Tagged> taggedUsers) {
+		this.taggedUsers = taggedUsers;
 	}
 }

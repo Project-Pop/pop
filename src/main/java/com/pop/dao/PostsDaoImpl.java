@@ -1,7 +1,10 @@
 package com.pop.dao;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.pop.dto.UsernameDto;
+import com.pop.models.Tagged;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +21,7 @@ public class PostsDaoImpl implements PostsDao{
 	public void createPost(Posts post) {
 		String sql = "INSERT INTO Posts (postId, imageUrl, username, timeStamp) values (?, ?, ?, ?)";
 		jt.update(sql, post.getPostId(), post.getImageUrl(), post.getUsername(), post.getTimeStamp());
+		tagMultipleUsers(post.getPostId(),post.getTaggedUsers().stream().map(UsernameDto::getUsername).collect(Collectors.toList()));
 	}
 	
 	public List<Reactions> getReactions(String postId) {
@@ -30,6 +34,11 @@ public class PostsDaoImpl implements PostsDao{
 		String sql = "Select * from Posts where postId = ?";
 		Posts p = jt.queryForObject(sql, new BeanPropertyRowMapper<Posts>(Posts.class), postId);
 		p.setReactions(getReactions(postId));
+
+//		p.setTaggedUsers(
+//				// onlyApproved: if true, only fetch tags which are approved
+//				(List<Tagged>)	getTagsOfPost(postId,  onlyApproved: true)
+//		);
 		return p;
 	}
 	
@@ -62,6 +71,11 @@ public class PostsDaoImpl implements PostsDao{
 	public void tagByUsername(String postId, String username) {
 		String sql = "INSERT INTO Tagged (postId, username) values (?,?)";
 		jt.update(sql, postId, username);
+	}
+
+	@Override
+	public void tagMultipleUsers(String postId, List<String> usernames) {
+		usernames.forEach(username-> tagByUsername(postId,username));
 	}
 
 	@Override

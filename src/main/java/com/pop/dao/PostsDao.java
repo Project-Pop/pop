@@ -13,7 +13,11 @@ public interface PostsDao {
 	public List<Posts> getMyTaggedPostsByUsername(String username);
 	public void declinePost(String postId, String username);
 	public void acceptPost(String postId, String username);
+
 	public void tagByUsername(String postId, String username);
+	public void tagMultipleUsers(String postId, List<String> usernames);
+
+
 	public void reactToPost(String username, String reactionString,  String postId);
 	public void removeFromTaggedPost(String username, String postId);
 	// we have to create one more table for deleted posts
