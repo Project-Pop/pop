@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pop.dao.rowmappers.UserRowMapper;
 import com.pop.models.User;
 
 @Transactional
@@ -75,14 +76,11 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public User getUserByUsername(String username) {
-		 try {
-	            String sql = "SELECT * FROM Users WHERE username = ?";
-	            return  jt.queryForObject(sql,
-	                    new BeanPropertyRowMapper<User>(User.class), 
-	                    username);
-	     } catch (EmptyResultDataAccessException e) {
-		            return null;
-	     }		
+        String sql = "SELECT * FROM Users   as U INNER JOIN UserProfile as UP ON U.username = UP.username where U.username = ?";      
+        return  jt.queryForObject(sql,
+                new UserRowMapper(), 
+                username);
+	     
 	}
 
 
@@ -98,6 +96,13 @@ public class UserDaoImpl implements UserDao{
 		 String sql = "SELECT username FROM Users WHERE userId = ?";
          return  jt.queryForObject(sql,
                  new BeanPropertyRowMapper<String>(String.class), userId);
+	}
+
+	@Override
+	public void saveUser(User u) {
+//		System.out.println(u);
+		String sql = "INSERT INTO Users (userId, username, fullname, email, phone, dob) values(?,?,?,?,?,?)";
+		jt.update(sql, u.getUserId(), u.getUsername(), u.getFullname(), u.getEmail(), u.getPhone(),u.getDob());
 	}
 
 	

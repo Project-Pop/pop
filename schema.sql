@@ -14,8 +14,16 @@ CREATE TABLE UserProfile(
     views int default(0),
     reacts int default(0),
     popScore int default(0),
+    followers int default(0),
+    following int default(0),
     FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE
 );
+
+ALTER TABLE UserProfile 
+ADD COLUMN followers int default(0);
+
+ALTER TABLE UserProfile
+ADD COLUMN following int default(0);
 
 CREATE TABLE Posts(
 	postId CHAR(36) PRIMARY KEY,

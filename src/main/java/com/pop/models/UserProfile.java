@@ -10,18 +10,31 @@ public class UserProfile {
 	int views;
 	int reacts;
 	int popScore;
+	int followers;
+	int following;
 	User user;
+	public UserProfile() {
+		
+	}
 	
-	public UserProfile(int user_id, @NotNull @Size(min = 3, max = 25) String username, int views, int reacts,
-			int popScore, User user) {
+
+	public UserProfile(@NotNull @Size(min = 3, max = 25) String username, int views, int reacts, int popScore,
+			int followers, int following, User user) {
 		super();
 		this.username = username;
 		this.views = views;
 		this.reacts = reacts;
 		this.popScore = popScore;
+		this.followers = followers;
+		this.following = following;
 		this.user = user;
 	}
-	
+	@Override
+	public String toString() {
+		return "UserProfile [username=" + username + ", views=" + views + ", reacts=" + reacts + ", popScore="
+				+ popScore + ", user=" + user + "]";
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -51,6 +64,22 @@ public class UserProfile {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}	
+	public int getFollowers() {
+		return followers;
 	}
+
+	public void setFollowers(int followers) {
+		this.followers = followers;
+	}
+
+	public int getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(int following) {
+		this.following = following;
+	}
+
 	
 }

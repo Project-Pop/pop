@@ -16,4 +16,7 @@ public interface UserProfileDao {
 	public void increasePopScore(String username);
 	public void setPopScore(String username, int popScore);
 	public void decreasePopScore(String username);
+	public void createProfile(String username);
+	public void followUser(String username, String followerUsername);
+	public void unFollowUser(String username, String followerUsername);
 }

@@ -85,8 +85,31 @@ public class UserProfileDaoImpl implements UserProfileDao{
 		jt.update(sql, username);			
 	}
 
+	@Override
+	public void createProfile(String username) {
+		String sql = "INSERT INTO UserProfile (username) values (?)";
+		jt.update(sql, username);
+	}
 
-	
+	@Override
+	public void followUser(String username, String followerUsername) {
+		String sql = "INSERT INTO Follows values (?, ?)";
+		jt.update(sql, username, followerUsername);
+		sql = "UPDATE UserProfile SET followers = followers + 1 WHERE username = ?";
+		jt.update(sql, username);
+		sql = "UPDATE UserProfile SET following = following + 1 WHERE username = ?";
+		jt.update(sql, followerUsername);
+	}
+
+	@Override
+	public void unFollowUser(String username, String followerUsername) {
+		String sql = "DELETE FROM Follows where username = ? and followerUsername = ?";
+		jt.update(sql, username, followerUsername);
+		sql = "UPDATE UserProfile SET followers = followers - 1 WHERE username = ?";
+		jt.update(sql, username);
+		sql = "UPDATE UserProfile SET following = following - 1 WHERE username = ?";
+		jt.update(sql, followerUsername);
+	}
 
 
 }

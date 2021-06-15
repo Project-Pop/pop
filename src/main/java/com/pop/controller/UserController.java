@@ -1,8 +1,11 @@
 package com.pop.controller;
 
+import com.pop.common.Response;
 import com.pop.dto.PatchUserDto;
 import com.pop.dto.SignUpUserDto;
 import com.pop.dto.UsernameDto;
+import com.pop.models.User;
+import com.pop.models.UserProfile;
 import com.pop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +22,14 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/")
-    void signUpNewUser(@RequestBody SignUpUserDto signUpUserDto, HttpServletResponse response) {
-        return;
+    void signUpNewUser(@RequestBody User user,  HttpServletResponse response) throws IOException {
+    	var res = userService.signUpNewUser(user);
+    	if(res.isContainsError()) {
+    		response.sendError(res.getCode(), res.getError());
+    	}
+    	else response.setStatus(res.getCode());
     }
-
+    
 
     @PatchMapping("/")
     PatchUserDto editUserProfile(@RequestBody PatchUserDto patchUserDto, HttpServletResponse response) throws IOException {
@@ -65,13 +72,19 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    void getUserProfile(@PathVariable String username) {
-        return;
+    User getUserProfile(@PathVariable String username, HttpServletResponse response) throws IOException{
+        Response res = userService.getUserProfile(username);
+        if(res.isContainsError()) {
+        	response.sendError(res.getCode(), res.getMessage());
+        }
+//        System.out.println(res.getData());
+        
+        return (User) res.getData();
     }
 
     @PostMapping("/{username}/follow")
     void followUser(@PathVariable String username) {
-        return;
+        
     }
 
 

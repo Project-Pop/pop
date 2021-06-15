@@ -7,15 +7,17 @@ import javax.validation.constraints.Size;
 
 public class User {
 	private String userId;
+	@NotNull
     private String username;
 	private String fullname;
     private String email;
 	private String phone;	
 	private Date dob;
+	private UserProfile userProfile;
 	public User() {
 		
 	}
-	public User(String userId, String username, String fullname, String email, String phone, Date dob) {
+	public User(String userId, @NotNull String username, String fullname, String email, String phone, Date dob) {
 		super();
 		this.userId = userId;
 		this.username = username;
@@ -25,12 +27,13 @@ public class User {
 		this.dob = dob;
 	}
 	
+	
+	
 	@Override
 	public String toString() {
-		return "User [user_id=" + userId + ", username=" + username + ", fullname=" + fullname + ", email=" + email
-				+ ", phone=" + phone + ", dob=" + dob + "]";
+		return "User [userId=" + userId + ", username=" + username + ", fullname=" + fullname + ", email=" + email
+				+ ", phone=" + phone + ", dob=" + dob + ", userProfile=" + userProfile + "]";
 	}
-	
 	public String getUserId() {
 		return userId;
 	}
@@ -67,5 +70,10 @@ public class User {
 	public void setDob(Date dob) {
 		this.dob = dob;
 	}
-	
+	public UserProfile getUserProfile() {
+		return userProfile;
+	}
+	public void setUserProfile(UserProfile userProfile) {
+		this.userProfile = userProfile;
+	}	
 }
