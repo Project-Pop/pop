@@ -49,7 +49,7 @@ public class PostsDaoImpl implements PostsDao{
 	
 	@Override
 	public List<Posts> getPostUploadedByUsername(String username) {
-		String sql = "Select * from Posts where postId = ?";
+		String sql = "Select * from Posts where username = ?";
 		return jt.query(sql, new BeanPropertyRowMapper<Posts>(Posts.class), username);
 	}
 
