@@ -55,7 +55,7 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public Response editComment(String commentId, CommentDto commentDto) {
 	    
-		if(amITheOwnerOfThisComment(commentId)) {
+		if(amITheOwnerOfThisComment(commentId)==false) {
 			return new Response("You cannot edit this", HttpServletResponse.SC_FORBIDDEN);
 		}
 		try {
@@ -68,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public Response deleteComment(String commentId) {
-		if(amITheOwnerOfThisComment(commentId)) {
+		if(amITheOwnerOfThisComment(commentId) == false) {
 			return new Response("You cannot edit this", HttpServletResponse.SC_FORBIDDEN);
 		}
 		try {
@@ -85,7 +85,7 @@ public class CommentServiceImpl implements CommentService {
 		var principalUser = (UsernameDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = principalUser.getUsername();
 		try {
-			commentsDao.like(commentId, username);;
+			commentsDao.like(commentId, username);
 		}catch (Exception e) {
 			return new Response(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
 		}

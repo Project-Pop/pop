@@ -19,6 +19,8 @@ public interface PostsDao {
 
 
 	public void reactToPost(String username, String reactionString,  String postId);
+	public void deleteReaction(String postId, String username);
+
 	public void removeFromTaggedPost(String username, String postId);
 	// we have to create one more table for deleted posts
 	public void deletePost(String postId); 	

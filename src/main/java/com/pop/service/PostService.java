@@ -17,14 +17,14 @@ public interface PostService {
 
     public Response getPostDetails(String postId);
 
-//    public Response editPostDetails(String postId, PatchPostDto patchPostDto);
+    public Response editPostDetails(String postId, PatchPostDto patchPostDto);
 
-//    public Response deletePost(String postId);
+    public Response deletePost(String postId);
 
-//    public Response tagApproval(String postId, String username, TagApprovalDto tagApprovalDto);
+    public Response tagApproval(String postId, String username, TagApprovalDto tagApprovalDto);
 
-//    public Response removeTag(String postId, String username);
+    public Response removeTag(String postId, String username);
 
-//    public Response reactOnPost(String postId, PostReactionDto postReactionDto);
+    public Response reactOnPost(String postId, PostReactionDto postReactionDto);
 
 }
