@@ -85,9 +85,16 @@ public class PostsDaoImpl implements PostsDao{
 
 	@Override
 	public void reactToPost(String username, String reactionString, String postId) {
+		deleteReaction(postId, username);
 		String sql = "INSERT INTO UserReactions (username, postId, reactionString) values (?, ?, ?)";
 		jt.update(sql, username, postId, reactionString);
 	}
+	
+	public void deleteReaction(String postId, String username) {
+		String sql = "DELETE FROM UserReactions where postId = ? AND username = ?";
+		jt.update(sql, postId, username);
+	}
+	
 
 	@Override
 	public void removeFromTaggedPost(String username, String postId) {
