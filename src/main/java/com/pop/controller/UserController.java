@@ -45,11 +45,9 @@ public class UserController {
 
     }
 
-    @PostMapping("/username-availability")
+    @GetMapping("/username-availability")
     boolean isUsernameAvailable(@RequestBody UsernameDto usernameDto, HttpServletResponse response) throws IOException {
-
         var res = userService.isUsernameAvailable(usernameDto.getUsername());
-
         if(res.isContainsError()){
             response.sendError(res.getCode(),res.getError());
         }else{
@@ -75,7 +73,7 @@ public class UserController {
     User getUserProfile(@PathVariable String username, HttpServletResponse response) throws IOException{
         Response res = userService.getUserProfile(username);
         if(res.isContainsError()) {
-        	response.sendError(res.getCode(), res.getMessage());
+        	response.sendError(res.getCode(), res.getError());
         }
 //        System.out.println(res.getData());
         
@@ -83,14 +81,20 @@ public class UserController {
     }
 
     @PostMapping("/{username}/follow")
-    void followUser(@PathVariable String username) {
-        
+    void followUser(@PathVariable String username, HttpServletResponse response) throws IOException{
+        Response res = userService.followUser(username);
+        if(res.isContainsError()) {
+        	response.sendError(res.getCode(), res.getError());
+        }
     }
 
 
     @PostMapping("/{username}/unfollow")
-    void unfollowUser(@PathVariable String username) {
-        return;
+    void unfollowUser(@PathVariable String username, HttpServletResponse response) throws IOException{
+    	 Response res = userService.unfollowUser(username);
+         if(res.isContainsError()) {
+         	response.sendError(res.getCode(), res.getError());
+         } 
     }
 
 }

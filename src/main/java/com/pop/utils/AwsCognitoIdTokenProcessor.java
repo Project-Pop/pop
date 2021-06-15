@@ -27,7 +27,7 @@ public class AwsCognitoIdTokenProcessor {
 
     public Authentication authenticate(HttpServletRequest request) throws Exception {
     	 List<GrantedAuthority> grantedAuthorities = of( new SimpleGrantedAuthority("ROLE_USER"));
-        UsernameDto user = new UsernameDto("__mohit__");
+    	 UsernameDto user = new UsernameDto("addyUrDaddy");
          return new JwtAuthentication(user, null, grantedAuthorities);
 //        String idToken = request.getHeader(this.jwtConfiguration.getHttpHeader());
 //

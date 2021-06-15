@@ -12,6 +12,7 @@ import com.pop.common.Response;
 import com.pop.dao.UserDao;
 import com.pop.dao.UserProfileDao;
 import com.pop.dto.PatchUserDto;
+import com.pop.dto.UsernameDto;
 import com.pop.models.User;
 
 @Service
@@ -85,19 +86,20 @@ public class UserSeriveImpl implements UserService {
 
 	@Override
 	public Response followUser(String username) {
-		var principalUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		var principalUser = (UsernameDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String myUsername = principalUser.getUsername();
 		try {
 			userProfileDao.followUser(username, myUsername);
 		}catch (Exception e) {
+			System.out.println(e.getCause().getLocalizedMessage());
 	    	return new Response(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
 		}
-		return Response.ok("You are following ${username}", 400);
+		return Response.ok("You are following ${username}", HttpServletResponse.SC_BAD_REQUEST);
 	}
 
 	@Override
 	public Response unfollowUser(String username) {
-		var principalUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		var principalUser = (UsernameDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String myUsername = principalUser.getUsername();
 		try {
 			userProfileDao.unFollowUser(username, myUsername);

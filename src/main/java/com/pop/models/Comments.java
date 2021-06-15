@@ -12,6 +12,9 @@ public class Comments {
 	int likeCount;
 	@NotNull
 	String message;
+	public Comments() {
+		
+	}
 	public Comments(@NotNull String commentId, @NotNull String username, @NotNull String postId, int likeCount,
 			@NotNull String message) {
 		super();

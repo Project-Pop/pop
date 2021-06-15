@@ -83,7 +83,7 @@ public class PostController {
     public List<Comments> getCommentsOnPost(@PathVariable String postId, HttpServletResponse response) throws IOException {
         Response res = commentService.getCommentsOnPost(postId);
         if(res.isContainsError()) {
-        	response.sendError(res.getCode(), res.getMessage());
+        	response.sendError(res.getCode(), res.getError());
         	return null;
         }
     	return (List<Comments>) res.getData();
@@ -91,9 +91,10 @@ public class PostController {
 
     @PostMapping("/{postId}/comments")
     void commentOnPost(@PathVariable String postId, @RequestBody CommentDto commentDto, HttpServletResponse response) throws IOException {
+    	System.out.println(postId);
         Response res = commentService.commentOnPost(postId, commentDto);
         if(res.isContainsError()) {
-        	response.sendError(res.getCode(), res.getMessage());
+        	response.sendError(res.getCode(), res.getError());
         }
         else response.setStatus(res.getCode());
     }
@@ -102,7 +103,7 @@ public class PostController {
     void editComment(@PathVariable String commentId, @RequestBody CommentDto commentDto, HttpServletResponse response) throws IOException {
     	Response res = commentService.editComment(commentId, commentDto);
         if(res.isContainsError()) {
-        	response.sendError(res.getCode(), res.getMessage());
+        	response.sendError(res.getCode(), res.getError());
         }
         else response.setStatus(res.getCode());
     }
@@ -112,7 +113,7 @@ public class PostController {
     void deleteComment(@PathVariable String postId, @PathVariable String commentId, HttpServletResponse response) throws IOException {
     	Response res = commentService.deleteComment(commentId);
         if(res.isContainsError()) {
-        	response.sendError(res.getCode(), res.getMessage());
+        	response.sendError(res.getCode(), res.getError());
         }
         else response.setStatus(res.getCode());
     }
@@ -122,7 +123,7 @@ public class PostController {
     void likeCommnent(@PathVariable String postId,@PathVariable String commentId, HttpServletResponse response) throws IOException {
     	Response res = commentService.like(commentId);
         if(res.isContainsError()) {
-        	response.sendError(res.getCode(), res.getMessage());
+        	response.sendError(res.getCode(), res.getError());
         }
         else response.setStatus(res.getCode());;
     }
@@ -131,7 +132,7 @@ public class PostController {
     void unlikeCommnent(@PathVariable String postId,@PathVariable String commentId, HttpServletResponse response) throws IOException {
     	Response res = commentService.unlike(commentId);
         if(res.isContainsError()) {
-        	response.sendError(res.getCode(), res.getMessage());
+        	response.sendError(res.getCode(), res.getError());
         }
         else response.setStatus(res.getCode());;
     }

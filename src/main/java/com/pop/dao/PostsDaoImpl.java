@@ -21,7 +21,7 @@ public class PostsDaoImpl implements PostsDao{
 	public void createPost(Posts post) {
 		String sql = "INSERT INTO Posts (postId, imageUrl, username, timeStamp, description) values (?, ?, ?, ?, ?)";
 		jt.update(sql, post.getPostId(), post.getImageUrl(), post.getUsername(), post.getTimeStamp(), post.getDescription());
-		tagMultipleUsers(post.getPostId(),post.getTaggedUsers().stream().map(UsernameDto::getUsername).collect(Collectors.toList()));
+//		tagMultipleUsers(post.getPostId(),post.getTaggedUsers().stream().map(UsernameDto::getUsername).collect(Collectors.toList()));
 	}
 	
 	public List<Reactions> getReactions(String postId) {
@@ -116,6 +116,12 @@ public class PostsDaoImpl implements PostsDao{
 	public String getOwnerOfPost(String postId) {
 		String sql = "SELECT username FROM Posts where postId = ?";
 		return jt.queryForObject(sql, new BeanPropertyRowMapper<>(String.class), postId);
+	}
+
+	@Override
+	public void editDescription(String postId, String description) {
+		String sql = "UPDATE Posts SET description = ? WHERE postId = ?";
+		jt.update(sql, description, postId);
 	}
 
 	

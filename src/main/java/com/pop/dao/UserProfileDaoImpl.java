@@ -104,7 +104,8 @@ public class UserProfileDaoImpl implements UserProfileDao{
 	@Override
 	public void unFollowUser(String username, String followerUsername) {
 		String sql = "DELETE FROM Follows where username = ? and followerUsername = ?";
-		jt.update(sql, username, followerUsername);
+		int q = jt.update(sql, username, followerUsername);
+		if(q == 0) return;
 		sql = "UPDATE UserProfile SET followers = followers - 1 WHERE username = ?";
 		jt.update(sql, username);
 		sql = "UPDATE UserProfile SET following = following - 1 WHERE username = ?";

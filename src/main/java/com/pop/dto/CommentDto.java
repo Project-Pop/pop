@@ -5,6 +5,11 @@ import javax.validation.constraints.NotNull;
 public class CommentDto {
 	@NotNull
 	String message;
+	
+	
+	public CommentDto() {
+		super();
+	}
 
 	public String getMessage() {
 		return message;

@@ -24,4 +24,5 @@ public interface PostsDao {
 	public void deletePost(String postId); 	
 	public void reportPost(String postId, String message);
 	public String  getOwnerOfPost(String postId);
+	public void editDescription(String postId,String description);
 }

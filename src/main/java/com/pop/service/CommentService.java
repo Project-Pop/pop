@@ -1,5 +1,7 @@
 package com.pop.service;
 
+import org.springframework.stereotype.Service;
+
 import com.pop.common.Response;
 import com.pop.dto.CommentDto;
 
