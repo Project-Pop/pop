@@ -86,4 +86,93 @@ public class Notification {
         this.opened = opened;
         this.expiryTime = expiryTime;
     }
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getNotificationId() {
+		return notificationId;
+	}
+
+	public void setNotificationId(String notificationId) {
+		this.notificationId = notificationId;
+	}
+
+	public NotificationType getNotificationType() {
+		return notificationType;
+	}
+
+	public void setNotificationType(NotificationType notificationType) {
+		this.notificationType = notificationType;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getPrimaryMediaUrl() {
+		return primaryMediaUrl;
+	}
+
+	public void setPrimaryMediaUrl(String primaryMediaUrl) {
+		this.primaryMediaUrl = primaryMediaUrl;
+	}
+
+	public String getSecondaryMediaUrl() {
+		return secondaryMediaUrl;
+	}
+
+	public void setSecondaryMediaUrl(String secondaryMediaUrl) {
+		this.secondaryMediaUrl = secondaryMediaUrl;
+	}
+
+	public NotificationTargetType getTargetType() {
+		return targetType;
+	}
+
+	public void setTargetType(NotificationTargetType targetType) {
+		this.targetType = targetType;
+	}
+
+	public String getTargetResourceId() {
+		return targetResourceId;
+	}
+
+	public void setTargetResourceId(String targetResourceId) {
+		this.targetResourceId = targetResourceId;
+	}
+
+	public boolean isOpened() {
+		return opened;
+	}
+
+	public void setOpened(boolean opened) {
+		this.opened = opened;
+	}
+
+	public Date getExpiryTime() {
+		return expiryTime;
+	}
+
+	public void setExpiryTime(Date expiryTime) {
+		this.expiryTime = expiryTime;
+	}
+    
 }

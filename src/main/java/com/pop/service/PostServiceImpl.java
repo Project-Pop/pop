@@ -36,6 +36,7 @@ public class PostServiceImpl implements PostService {
         String username = principalUser.getUsername();
         return (username == postsDao.getOwnerOfPost(postId));
     }
+    
 
     @Override
     public Response createPost(NewPostDto newPostDto, MultipartFile image, MultipartFile minImage) {
@@ -101,7 +102,7 @@ public class PostServiceImpl implements PostService {
     public Response getPostDetails(String postId) {
         try {
             // if I am not the owner of post, then only approved tagged users are fetched
-            Posts post = postsDao.getPostByPostId(postId, amITheOwnerOfThisPost(postId) == false);
+            Posts post = postsDao.getPostByPostId(postId, amITheOwnerOfThisPost(postId) == false,((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
             return new Response(post, "Post fetched", HttpServletResponse.SC_OK);
         } catch (Exception err) {
             return Response.error(err.toString(), HttpServletResponse.SC_BAD_REQUEST);

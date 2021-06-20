@@ -12,6 +12,16 @@ public class UserProfile {
 	int popScore;
 	int followers;
 	int following;
+	String bio;
+	public String getBio() {
+		return bio;
+	}
+
+
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
+
 	User user;
 	public UserProfile() {
 		
@@ -19,7 +29,7 @@ public class UserProfile {
 	
 
 	public UserProfile(@NotNull @Size(min = 3, max = 25) String username, int views, int reacts, int popScore,
-			int followers, int following, User user) {
+			int followers, int following, String bio, User user) {
 		super();
 		this.username = username;
 		this.views = views;
@@ -27,8 +37,11 @@ public class UserProfile {
 		this.popScore = popScore;
 		this.followers = followers;
 		this.following = following;
+		this.bio = bio;
 		this.user = user;
 	}
+
+
 	@Override
 	public String toString() {
 		return "UserProfile [username=" + username + ", views=" + views + ", reacts=" + reacts + ", popScore="

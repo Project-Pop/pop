@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pop.models.User;
 import com.pop.models.UserProfile;
 
 @Transactional
@@ -21,7 +20,7 @@ public class UserProfileDaoImpl implements UserProfileDao{
 	public UserProfileDaoImpl(JdbcTemplate jt) {
 		this.jt = jt;
 	}
-		
+
 	@Override
 	public List<UserProfile> getAll() {
 		String sql = "SELECT * FROM UserProfile";
@@ -47,13 +46,9 @@ public class UserProfileDaoImpl implements UserProfileDao{
 	
 	@Override
 	public void updateUserProfile(UserProfile user) {
+		// TODO
 	}
 
-	@Override
-	public boolean exists(String phoneNo) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public void increaseViews(String username) {
@@ -118,5 +113,9 @@ public class UserProfileDaoImpl implements UserProfileDao{
 		return jt.queryForObject(sql, new BeanPropertyRowMapper<>(String.class), username);
 	}
 
-
+	@Override
+	public void updateBio(String username, String bio) {
+		String sql = "UPDATE UserProfile SET bio = ? where username = ?";
+		jt.update(sql, bio, username);
+	}
 }

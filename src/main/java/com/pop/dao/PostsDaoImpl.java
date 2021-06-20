@@ -32,15 +32,21 @@ public class PostsDaoImpl implements PostsDao {
         return jt.query(sql, new BeanPropertyRowMapper<Reactions>(Reactions.class));
     }
 
+    public void increaseCount(String postId, String username) {
+    	String sql = "INSERT INTO PostViews values (?,?)";
+    	jt.update(sql, postId, username);
+    	sql = "UPDATE Posts SET views = views + 1 WHERE postId = ?";
+    	jt.update(sql, postId);
+    	sql = "UPDATE UserProfile SET views = views + 1 WHERE username = ?";
+    	jt.update(sql, username);
+    }
     @Override
-    public Posts getPostByPostId(String postId, boolean onlyApproved) {
+    public Posts getPostByPostId(String postId, boolean onlyApproved, String username) {
         String sql = "Select * from Posts where postId = ?";
         Posts p = jt.queryForObject(sql, new BeanPropertyRowMapper<Posts>(Posts.class), postId);
-
         p.setReactions(getReactions(postId));
-
         p.setTaggedUsers(getTaggedUser(postId, onlyApproved));
-
+        increaseCount(postId, username);
         return p;
     }
 
@@ -54,6 +60,7 @@ public class PostsDaoImpl implements PostsDao {
         }
     }
 
+    // just return postId here instead of whole data
     @Override
     public List<Posts> getPostUploadedByUsername(String username) {
         String sql = "Select * from Posts where username = ?";

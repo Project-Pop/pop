@@ -6,12 +6,12 @@ import com.pop.models.UserProfile;
 
 public interface UserProfileDao {
 	public List<UserProfile> getAll();
-	public boolean exists(String phoneNo);
 	public UserProfile getUserProfileByUsername(String username);
 	// unimplemented
 	public String getProfileImageUrl(String username);
 	public void updateUserProfile(UserProfile user);
 	public void updateImageUrl(String imageUrl, String username);
+	public void updateBio(String username, String bio);
 	public void increaseViews(String username);
 	public void increaseReacts(String username);
 	public void increasePopScore(String username);
