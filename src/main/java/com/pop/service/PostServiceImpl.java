@@ -3,6 +3,7 @@ package com.pop.service;
 import com.pop.common.Response;
 import com.pop.dao.PostsDao;
 import com.pop.dto.*;
+import com.pop.models.JwtUser;
 import com.pop.models.Posts;
 import com.pop.models.Tagged;
 import com.pop.models.User;
@@ -27,7 +28,7 @@ public class PostServiceImpl implements PostService {
     private StorageService storageService;
 
     public boolean amITheOwnerOfThisPost(String postId) {
-        var principalUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principalUser.getUsername();
         return (username == postsDao.getOwnerOfPost(postId));
     }
@@ -162,7 +163,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Response reactOnPost(String postId, PostReactionDto postReactionDto) {
         try {
-            var principalUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = principalUser.getUsername();
 
             if(postReactionDto.getReactionString()!=null) {

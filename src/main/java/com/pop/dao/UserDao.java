@@ -1,8 +1,10 @@
 package com.pop.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.pop.dto.SignUpUserDto;
+import com.pop.models.Notification;
 import com.pop.models.User;
 
 
@@ -18,5 +20,9 @@ public interface UserDao {
 	
 	// Update User only email or dob can be udpated
 	public void updateUser(User user);
-	
+
+//	TODO: implement below methods;
+//	public void saveNotification(Notification notification);
+//	public  void updateNotification(String notificationId,String title, boolean opened, Date timestamp);
+//	public List<Notification> getNotifications(String username);
 }

@@ -5,12 +5,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.pop.common.Response;
 import com.pop.dto.PatchUserDto;
 import com.pop.dto.SignUpUserDto;
-import com.pop.models.User;
 
 
 public interface UserService {
 
-    public Response signUpNewUser(User signUpUserDto);
+    public Response signUpNewUser(SignUpUserDto signUpUserDto);
     
 	public void updateUserImage(MultipartFile image, MultipartFile miniImage);
 

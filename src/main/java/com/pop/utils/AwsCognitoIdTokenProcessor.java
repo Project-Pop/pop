@@ -3,8 +3,7 @@ package com.pop.utils;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.pop.config.JwtConfiguration;
-import com.pop.dto.UsernameDto;
-import com.pop.models.User;
+import com.pop.models.JwtUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,8 +11,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.List;
+
 import static java.util.List.of;
 
 @Component
@@ -26,9 +25,11 @@ public class AwsCognitoIdTokenProcessor {
     private ConfigurableJWTProcessor configurableJWTProcessor;
 
     public Authentication authenticate(HttpServletRequest request) throws Exception {
-    	 List<GrantedAuthority> grantedAuthorities = of( new SimpleGrantedAuthority("ROLE_USER"));
-    	 UsernameDto user = new UsernameDto("addyUrDaddy");
-         return new JwtAuthentication(user, null, grantedAuthorities);
+        List<GrantedAuthority> grantedAuthorities = of(new SimpleGrantedAuthority("ROLE_USER"));
+//TODO: GET userId and phone from jwt token and fetch username by userId then to set the username in JwtUser.
+        JwtUser user = new JwtUser("addyUrDaddy", "+91daddy");
+        user.setUsername("addaddy");
+        return new JwtAuthentication(user, null, grantedAuthorities);
 //        String idToken = request.getHeader(this.jwtConfiguration.getHttpHeader());
 //
 //        System.out.println(idToken);
@@ -58,15 +59,14 @@ public class AwsCognitoIdTokenProcessor {
     }
 
 
-
     private String getUserIdFrom(JWTClaimsSet claims) {
         return claims.getClaims()
                 .get(this.jwtConfiguration.getUserIdField())
                 .toString();
     }
 
-    private void verifyIdToken(JWTClaimsSet claims) throws Exception{
-        if(!claims.getIssuer().equals(this.jwtConfiguration.getCognitoIdentityPoolUrl())){
+    private void verifyIdToken(JWTClaimsSet claims) throws Exception {
+        if (!claims.getIssuer().equals(this.jwtConfiguration.getCognitoIdentityPoolUrl())) {
             throw new Exception("Not an ID Token");
         }
     }
@@ -79,8 +79,8 @@ public class AwsCognitoIdTokenProcessor {
     }
 
 
-    private String getBearerToken(String token){
-        return token.startsWith("Bearer ")? token.substring("Bearer ".length()):token;
+    private String getBearerToken(String token) {
+        return token.startsWith("Bearer ") ? token.substring("Bearer ".length()) : token;
     }
 
 }

@@ -22,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/")
-    void signUpNewUser(@RequestBody User user,  HttpServletResponse response) throws IOException {
+    void signUpNewUser(@RequestBody SignUpUserDto user,  HttpServletResponse response) throws IOException {
     	var res = userService.signUpNewUser(user);
     	if(res.isContainsError()) {
     		response.sendError(res.getCode(), res.getError());

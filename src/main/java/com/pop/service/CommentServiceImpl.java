@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.pop.models.JwtUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class CommentServiceImpl implements CommentService {
 	private CommentsDao commentsDao;
 	
 	public boolean amITheOwnerOfThisComment(String commentId) {
-		var principalUser = (UsernameDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = principalUser.getUsername();
 		return (username == commentsDao.getCommentOwner(commentId));
 	}
@@ -40,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public Response commentOnPost(String postId, CommentDto commentDto) {
-	    var principalUser = (UsernameDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	    String username = principalUser.getUsername();
 	    String commentId = UUID.randomUUID().toString();
 	    Comments comment = new Comments(commentId, username, postId, 0, commentDto.getMessage());
@@ -82,7 +83,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public Response like(String commentId) {
-		var principalUser = (UsernameDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = principalUser.getUsername();
 		try {
 			commentsDao.like(commentId, username);
@@ -92,7 +93,7 @@ public class CommentServiceImpl implements CommentService {
 		return Response.ok("Comment Liked", HttpServletResponse.SC_OK);	}
 	@Override
 	public Response unlike(String commentId) {
-		var principalUser = (UsernameDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = principalUser.getUsername();
 		try {
 			commentsDao.unlike(commentId, username);;
