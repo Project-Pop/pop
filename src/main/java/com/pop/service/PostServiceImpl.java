@@ -4,9 +4,10 @@ import com.pop.common.Response;
 import com.pop.dao.PostsDao;
 import com.pop.dto.*;
 import com.pop.models.JwtUser;
+import com.pop.models.NotificationResponseType;
 import com.pop.models.Posts;
 import com.pop.models.Tagged;
-import com.pop.models.User;
+import com.pop.utils.MediaUrlBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,9 +24,12 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostsDao postsDao;
-    
+
     @Autowired
     private StorageService storageService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     public boolean amITheOwnerOfThisPost(String postId) {
         var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -53,6 +57,18 @@ public class PostServiceImpl implements PostService {
             storageService.uploadFile(image, newPost.getPostId());
             newPost.setTaggedUsers(newPostDto.getTaggedUsers().stream().map(usernameDto -> new Tagged(usernameDto.getUsername(), newPost.getPostId())).collect(Collectors.toList()));
             postsDao.createPost(newPost);
+
+            // sending tagged notification to all tagged users
+            var taggedUsernames = newPostDto.getTaggedUsers().stream().map(usernameDto -> usernameDto.getUsername()).collect(Collectors.toList());
+            taggedUsernames.forEach(
+                    username -> notificationService.
+                            buildTagRequestNotification(
+                                    username,
+                                    newPost.getPostId(),
+                                    MediaUrlBuilder.buildPostMediaUrl(newPost.getPostId())
+                            )
+            );
+
             return new Response(newPost, "post created successfully", HttpServletResponse.SC_CREATED);
 
         } catch (Exception err) {
@@ -112,7 +128,7 @@ public class PostServiceImpl implements PostService {
         try {
             if (amITheOwnerOfThisPost(postId)) {
 
-                postsDao.editDescription(postId,patchPostDto.getDescription());
+                postsDao.editDescription(postId, patchPostDto.getDescription());
 
                 return Response.ok("Post edited successfully", HttpServletResponse.SC_ACCEPTED);
             } else {
@@ -132,14 +148,20 @@ public class PostServiceImpl implements PostService {
 
             if (status) {
                 postsDao.acceptPost(postId, username);
-                return Response.ok("Accepted", HttpServletResponse.SC_ACCEPTED);
-
             } else {
                 postsDao.declinePost(postId, username);
-                return Response.ok("Denied", HttpServletResponse.SC_ACCEPTED);
-
             }
 
+            //sending notification
+            NotificationResponseType notificationResponseType = status ? NotificationResponseType.accept : NotificationResponseType.deny;
+            notificationService.buildTagResponseNotification(
+                    postsDao.getOwnerOfPost(postId),
+                    notificationResponseType,
+                    postId,
+                    MediaUrlBuilder.buildPostMediaUrl(postId));
+
+            String responseMessage = status ? "Accepted" : "Denied";
+            return Response.ok(responseMessage, HttpServletResponse.SC_ACCEPTED);
 
         } catch (Exception err) {
             return Response.error(err.toString(), HttpServletResponse.SC_BAD_REQUEST);
@@ -166,13 +188,20 @@ public class PostServiceImpl implements PostService {
             var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = principalUser.getUsername();
 
-            if(postReactionDto.getReactionString()!=null) {
+            if (postReactionDto.getReactionString() != null) {
 
                 postsDao.reactToPost(username, postReactionDto.getReactionString(), postId);
-                return Response.ok("Reacted",HttpServletResponse.SC_CREATED);
-            }else{
-               postsDao.deleteReaction(postId,username);
-                return Response.ok("Reaction Deleted",HttpServletResponse.SC_ACCEPTED);
+
+                // sending notification
+                notificationService.buildPostReactionNotification(
+                        postsDao.getOwnerOfPost(postId),
+                        postId,
+                        MediaUrlBuilder.buildPostMediaUrl(postId));
+
+                return Response.ok("Reacted", HttpServletResponse.SC_CREATED);
+            } else {
+                postsDao.deleteReaction(postId, username);
+                return Response.ok("Reaction Deleted", HttpServletResponse.SC_ACCEPTED);
             }
         } catch (Exception err) {
             return Response.error(err.toString(), HttpServletResponse.SC_BAD_REQUEST);

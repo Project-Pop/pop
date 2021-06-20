@@ -5,7 +5,6 @@ import com.pop.dao.UserDao;
 import com.pop.dao.UserProfileDao;
 import com.pop.dto.PatchUserDto;
 import com.pop.dto.SignUpUserDto;
-import com.pop.dto.UsernameDto;
 import com.pop.models.JwtUser;
 import com.pop.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,9 @@ public class UserSeriveImpl implements UserService {
 
     @Autowired
     private StorageService storageService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public Response isUsernameAvailable(String username) {
@@ -82,9 +84,9 @@ public class UserSeriveImpl implements UserService {
             userDao.saveUser(newUser);
             userProfileDao.createProfile(user.getUsername());
         } catch (DuplicateKeyException e) {
-            return new Response(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
+            return Response.error(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
         } catch (DataAccessException e) {
-            return new Response(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
+            return Response.error(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
         return new Response(user, "USER ADDED", HttpServletResponse.SC_OK);
     }
@@ -95,7 +97,7 @@ public class UserSeriveImpl implements UserService {
             User u = userDao.getUserByUsername(username);
             return new Response(u, "USER FETCHED", HttpServletResponse.SC_OK);
         } catch (Exception e) {
-            return new Response(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
+            return Response.error(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
@@ -105,9 +107,13 @@ public class UserSeriveImpl implements UserService {
         String myUsername = principalUser.getUsername();
         try {
             userProfileDao.followUser(username, myUsername);
+
+            //sending notification
+            notificationService.buildFollowNotification(username);
+
         } catch (Exception e) {
             System.out.println(e.getCause().getLocalizedMessage());
-            return new Response(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
+            return Response.error(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
         return Response.ok("You are following ${username}", HttpServletResponse.SC_BAD_REQUEST);
     }
@@ -137,5 +143,13 @@ public class UserSeriveImpl implements UserService {
         storageService.uploadFile(image, imageUrl);
         storageService.uploadFile(miniImage, myUsername);
         userProfileDao.updateImageUrl(imageUrl, myUsername);
+    }
+
+    @Override
+    public Response getUserActivities() {
+
+        var notifications = notificationService.getNotifications();
+
+        return new Response(notifications, "notifications fetched", HttpServletResponse.SC_OK);
     }
 }

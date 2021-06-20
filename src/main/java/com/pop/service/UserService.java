@@ -23,7 +23,7 @@ public interface UserService {
 
 //    public Response searchUsers(String searchString);
 
-//    public Response getUserActivities(HttpServletResponse response);
+    public Response getUserActivities();
 
     public Response followUser(String username);
 

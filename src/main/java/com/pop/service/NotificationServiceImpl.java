@@ -3,10 +3,13 @@ package com.pop.service;
 import com.pop.models.JwtUser;
 import com.pop.models.Notification;
 import com.pop.models.NotificationResponseType;
+import com.pop.utils.MediaUrlBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class NotificationServiceImpl implements NotificationService {
 
     @Override
@@ -16,7 +19,7 @@ public class NotificationServiceImpl implements NotificationService {
         var newNotification = Notification.buildFollowNotification(
                 remoteUsername,
                 title,
-                "prefix/userAvatar/" + myUsername,
+                MediaUrlBuilder.buildUserStaticImageUrl(myUsername),
                 null,
                 myUsername);
         //        TODO: save notification
@@ -24,18 +27,17 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void buildReactionNotification(String remoteUsername, String postId, String postImageUrl) {
+    public void buildPostReactionNotification(String remoteUsername, String postId, String postImageUrl) {
         String myUsername = ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String title = myUsername + " reacted on your post";
         var newNotification = Notification.buildReactionNotification(
                 remoteUsername,
                 title,
-                "prefix/userAvatar/" + myUsername,
+                MediaUrlBuilder.buildUserStaticImageUrl(myUsername),
                 postImageUrl,
                 postId);
         //        TODO: save notification
         //        TODO: send notification via aws sns
-
 
     }
 
@@ -47,7 +49,7 @@ public class NotificationServiceImpl implements NotificationService {
         var newNotification = Notification.buildCommentNotification(
                 remoteUsername,
                 title,
-                "prefix/userAvatar/" + myUsername,
+                MediaUrlBuilder.buildUserStaticImageUrl(myUsername),
                 postImageUrl,
                 postId
         );
@@ -57,13 +59,27 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void buildCommentReactionNotification(String remoteUsername, String comment, String postId, String postImageUrl) {
+        String myUsername = ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String title = myUsername + " liked your comment: " + comment;
+        var newNotification = Notification.buildReactionNotification(
+                remoteUsername,
+                title,
+                MediaUrlBuilder.buildUserStaticImageUrl(myUsername),
+                postImageUrl,
+                postId);
+        //        TODO: save notification
+        //        TODO: send notification via aws sns
+    }
+
+    @Override
     public void buildTagRequestNotification(String remoteUsername, String postId, String postImageUrl) {
         String myUsername = ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String title = myUsername + " tagged you. Accept the tag if you like it.";
         var newNotification = Notification.buildTagRequestNotification(
                 remoteUsername,
                 title,
-                "prefix/userAvatar/" + myUsername,
+                MediaUrlBuilder.buildUserStaticImageUrl(myUsername),
                 postImageUrl,
                 postId);
         //        TODO: save notification
@@ -82,7 +98,8 @@ public class NotificationServiceImpl implements NotificationService {
 
         var newNotification = Notification.buildTagResponseNotification(
                 remoteUsername,
-                title, "prefix/userAvatar/" + myUsername,
+                title,
+                MediaUrlBuilder.buildUserStaticImageUrl(myUsername),
                 postImageUrl,
                 postId);
 
