@@ -1,3 +1,4 @@
+drop database pop;
 create database pop;
 use pop;
 CREATE TABLE Users (
@@ -14,24 +15,19 @@ CREATE TABLE UserProfile(
     views int default(0),
     reacts int default(0),
     popScore int default(0),
-    followers int default(0),
-    following int default(0),
     bio VARCHAR(1000),
     FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE
 );
-
 
 CREATE TABLE Posts(
 	postId CHAR(36) PRIMARY KEY,
     imageUrl varchar(100),
     username VARCHAR(25),
     views INT DEFAULT(0),
-    description VARCHAR(300),
     timeStamp date,
 	FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
     INDEX (username)
 );
-
 CREATE TABLE UserReactions(
 	username VARCHAR(25),
     postId CHAR(36),
@@ -84,3 +80,39 @@ create TABLE CommentsReactionCounter(
     FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
     FOREIGN KEY (commentId) REFERENCES Comments(commentId) ON DELETE CASCADE
 );
+
+
+CREATE TABLE Notification(
+	notificationId CHAR(36) PRIMARY KEY,
+    username VARCHAR(25),
+    notificationType int,
+	timestamp DATE,
+    title VARCHAR(255),
+    primaryMediaUrl VARCHAR(300),
+    secondaryMediaUrl VARCHAR(300),
+    targetType int,
+    targetResourceId varchar(200),
+    opened bool,
+    expiryTime Date,
+    INDEX (username, timestamp)
+);
+
+CREATE TABLE Notifications(
+	notificationId CHAR(36) PRIMARY KEY,
+    username VARCHAR(25),
+    notificationType int,
+	timestamp DATE,
+    title VARCHAR(255),
+    primaryMediaUrl VARCHAR(300),
+    secondaryMediaUrl VARCHAR(300),
+    targetType int,
+    targetResourceId varchar(200),
+    opened bool,
+    expiryTime Date,
+    INDEX (username, timestamp),
+    FOREIGN KEY (username) REFERENCES Users(username)
+);
+-- drop table Notification;
+ALTER TABLE UserProfile
+ADD COLUMN Bio VARCHAR(1000);
+SELECT * FROM UserProfile;
