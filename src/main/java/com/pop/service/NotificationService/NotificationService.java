@@ -1,4 +1,4 @@
-package com.pop.service;
+package com.pop.service.NotificationService;
 
 import com.pop.dto.UsernameDto;
 import com.pop.models.Notification;

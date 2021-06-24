@@ -6,7 +6,7 @@ import com.pop.dto.SignUpUserDto;
 import com.pop.dto.UsernameDto;
 import com.pop.models.Notification;
 import com.pop.models.User;
-import com.pop.service.UserService;
+import com.pop.service.UserService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

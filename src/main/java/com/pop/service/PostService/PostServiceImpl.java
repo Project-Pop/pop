@@ -1,4 +1,4 @@
-package com.pop.service;
+package com.pop.service.PostService;
 
 import com.pop.common.Response;
 import com.pop.dao.PostsDao;
@@ -7,6 +7,9 @@ import com.pop.models.JwtUser;
 import com.pop.models.NotificationResponseType;
 import com.pop.models.Posts;
 import com.pop.models.Tagged;
+import com.pop.service.AwsClientService.SqsService;
+import com.pop.service.AwsClientService.StorageService;
+import com.pop.service.NotificationService.NotificationService;
 import com.pop.utils.MediaFilenameBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

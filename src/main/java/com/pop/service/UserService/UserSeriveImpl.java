@@ -1,4 +1,4 @@
-package com.pop.service;
+package com.pop.service.UserService;
 
 import com.pop.common.Response;
 import com.pop.dao.UserDao;
@@ -7,6 +7,8 @@ import com.pop.dto.PatchUserDto;
 import com.pop.dto.SignUpUserDto;
 import com.pop.models.JwtUser;
 import com.pop.models.User;
+import com.pop.service.AwsClientService.StorageService;
+import com.pop.service.NotificationService.NotificationService;
 import com.pop.utils.MediaFilenameBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;

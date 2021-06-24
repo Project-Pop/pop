@@ -1,4 +1,4 @@
-package com.pop.service;
+package com.pop.service.PostService;
 
 import com.pop.common.Response;
 import com.pop.dao.CommentsDao;
@@ -6,6 +6,8 @@ import com.pop.dao.PostsDao;
 import com.pop.dto.CommentDto;
 import com.pop.models.Comments;
 import com.pop.models.JwtUser;
+import com.pop.service.AwsClientService.StorageService;
+import com.pop.service.NotificationService.NotificationService;
 import com.pop.utils.MediaFilenameBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

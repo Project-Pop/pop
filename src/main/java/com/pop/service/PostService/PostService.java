@@ -1,4 +1,4 @@
-package com.pop.service;
+package com.pop.service.PostService;
 
 import org.springframework.web.multipart.MultipartFile;
 

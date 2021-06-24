@@ -1,4 +1,4 @@
-package com.pop.service;
+package com.pop.service.AwsClientService;
 
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.model.MessageAttributeValue;

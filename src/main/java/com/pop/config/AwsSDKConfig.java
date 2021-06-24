@@ -3,6 +3,8 @@ package com.pop.config;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
@@ -36,6 +38,9 @@ public class AwsSDKConfig {
         return AmazonSQSClientBuilder.defaultClient();
     }
 
-
+    @Bean
+    public AmazonDynamoDB dynamoDBClient(){
+        return AmazonDynamoDBClientBuilder.defaultClient();
+    }
 
 }
