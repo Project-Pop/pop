@@ -1,9 +1,11 @@
 package com.pop.service;
 
+import com.pop.dto.UsernameDto;
 import com.pop.models.JwtUser;
 import com.pop.models.Notification;
 import com.pop.models.NotificationResponseType;
-import com.pop.utils.MediaUrlBuilder;
+import com.pop.utils.MediaFilenameBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,12 @@ import java.util.List;
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
+    @Autowired
+    private SqsService sqsService;
+
+    @Autowired
+    private StorageService storageService;
+
     @Override
     public void buildFollowNotification(String remoteUsername) {
         String myUsername = ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
@@ -19,42 +27,41 @@ public class NotificationServiceImpl implements NotificationService {
         var newNotification = Notification.buildFollowNotification(
                 remoteUsername,
                 title,
-                MediaUrlBuilder.buildUserStaticImageUrl(myUsername),
+                storageService.getMediaUrlFromFilename(MediaFilenameBuilder.buildUserStaticImageFilename(myUsername)),
                 null,
                 myUsername);
-        //        TODO: save notification
-        //        TODO: send notification via aws sns
+
+        sqsService.sendNotificationMessage(newNotification);
     }
 
     @Override
-    public void buildPostReactionNotification(String remoteUsername, String postId, String postImageUrl) {
+    public void buildPostReactionNotification(String remoteUsername, String postId, String postImageUrl, String postOwner) {
         String myUsername = ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String title = myUsername + " reacted on your post";
-        var newNotification = Notification.buildReactionNotification(
+        var newNotification = Notification.buildPostReactionNotification(
                 remoteUsername,
                 title,
-                MediaUrlBuilder.buildUserStaticImageUrl(myUsername),
+                storageService.getMediaUrlFromFilename(MediaFilenameBuilder.buildUserStaticImageFilename(myUsername)),
                 postImageUrl,
                 postId);
-        //        TODO: save notification
-        //        TODO: send notification via aws sns
+        sqsService.sendNotificationMessage(newNotification, postId, postOwner);
 
     }
 
     @Override
-    public void buildCommentNotification(String remoteUsername, String comment, String postId, String postImageUrl) {
+    public void buildCommentNotification(String remoteUsername, String comment, String postId, String postImageUrl, String postOwner) {
         String myUsername = ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String title = myUsername + " commented: " + comment;
 
         var newNotification = Notification.buildCommentNotification(
                 remoteUsername,
                 title,
-                MediaUrlBuilder.buildUserStaticImageUrl(myUsername),
+                storageService.getMediaUrlFromFilename(MediaFilenameBuilder.buildUserStaticImageFilename(myUsername)),
                 postImageUrl,
                 postId
         );
-        //        TODO: save notification
-        //        TODO: send notification via aws sns
+
+        sqsService.sendNotificationMessage(newNotification, postId, postOwner);
 
     }
 
@@ -62,28 +69,30 @@ public class NotificationServiceImpl implements NotificationService {
     public void buildCommentReactionNotification(String remoteUsername, String comment, String postId, String postImageUrl) {
         String myUsername = ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String title = myUsername + " liked your comment: " + comment;
-        var newNotification = Notification.buildReactionNotification(
+        var newNotification = Notification.buildCommentReactionNotification(
                 remoteUsername,
                 title,
-                MediaUrlBuilder.buildUserStaticImageUrl(myUsername),
+                storageService.getMediaUrlFromFilename(MediaFilenameBuilder.buildUserStaticImageFilename(myUsername)),
                 postImageUrl,
                 postId);
-        //        TODO: save notification
-        //        TODO: send notification via aws sns
+
+        sqsService.sendNotificationMessage(newNotification);
+
     }
 
     @Override
-    public void buildTagRequestNotification(String remoteUsername, String postId, String postImageUrl) {
+    public void buildTagRequestNotification(List<UsernameDto> taggedUsers, String postId, String postImageUrl) {
         String myUsername = ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         String title = myUsername + " tagged you. Accept the tag if you like it.";
         var newNotification = Notification.buildTagRequestNotification(
-                remoteUsername,
+                null,
                 title,
-                MediaUrlBuilder.buildUserStaticImageUrl(myUsername),
+                storageService.getMediaUrlFromFilename(MediaFilenameBuilder.buildUserStaticImageFilename(myUsername)),
                 postImageUrl,
                 postId);
-        //        TODO: save notification
-        //        TODO: send notification via aws sns
+
+        sqsService.sendNotificationMessage(newNotification, taggedUsers);
+
     }
 
     @Override
@@ -99,12 +108,11 @@ public class NotificationServiceImpl implements NotificationService {
         var newNotification = Notification.buildTagResponseNotification(
                 remoteUsername,
                 title,
-                MediaUrlBuilder.buildUserStaticImageUrl(myUsername),
+                storageService.getMediaUrlFromFilename(MediaFilenameBuilder.buildUserStaticImageFilename(myUsername)),
                 postImageUrl,
                 postId);
 
-        //        TODO: save notification
-        //        TODO: send notification via aws sns
+        sqsService.sendNotificationMessage(newNotification);
 
     }
 

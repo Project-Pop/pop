@@ -7,6 +7,7 @@ import com.pop.dto.PatchUserDto;
 import com.pop.dto.SignUpUserDto;
 import com.pop.models.JwtUser;
 import com.pop.models.User;
+import com.pop.utils.MediaFilenameBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
 
 @Service
 public class UserSeriveImpl implements UserService {
@@ -139,10 +139,15 @@ public class UserSeriveImpl implements UserService {
         if (imageUrl != null && imageUrl.length() != 0) {
             storageService.deleteFile(imageUrl);
         }
-        imageUrl = UUID.randomUUID().toString();
-        storageService.uploadFile(image, imageUrl);
-        storageService.uploadFile(miniImage, myUsername);
-        userProfileDao.updateImageUrl(imageUrl, myUsername);
+
+// uploading original size user profile image
+        String newDynamicImageFilename = MediaFilenameBuilder.buildUserDynamicImageFilename();
+        String newDynamicImageUrl = storageService.uploadFile(image, newDynamicImageFilename);
+        userProfileDao.updateImageUrl(newDynamicImageUrl, myUsername);
+
+// uploading thumbnail purpose profile image
+        String thumbnailFilename = MediaFilenameBuilder.buildUserStaticImageFilename(myUsername);
+        storageService.uploadFile(miniImage, thumbnailFilename);
     }
 
     @Override

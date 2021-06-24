@@ -4,6 +4,7 @@ public enum NotificationType {
     Follow,
     TagRequest,
     TagResponse,
-    Reaction,
+    PostReaction,
     Comment,
+    CommentReaction,
 }

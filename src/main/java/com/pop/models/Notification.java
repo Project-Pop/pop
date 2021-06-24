@@ -54,9 +54,14 @@ public class Notification {
         return Notification.buildPostNotifications(username, title, NotificationType.Comment, primaryMediaUrl, secondaryMediaUrl, targetResourceId);
     }
 
-    public static Notification buildReactionNotification(String username, String title, String primaryMediaUrl, String secondaryMediaUrl, String targetResourceId) {
-        return Notification.buildPostNotifications(username, title, NotificationType.Reaction, primaryMediaUrl, secondaryMediaUrl, targetResourceId);
+    public static Notification buildPostReactionNotification(String username, String title, String primaryMediaUrl, String secondaryMediaUrl, String targetResourceId) {
+        return Notification.buildPostNotifications(username, title, NotificationType.PostReaction, primaryMediaUrl, secondaryMediaUrl, targetResourceId);
     }
+
+
+	public static Notification buildCommentReactionNotification(String username, String title, String primaryMediaUrl, String secondaryMediaUrl, String targetResourceId) {
+		return Notification.buildPostNotifications(username, title, NotificationType.CommentReaction, primaryMediaUrl, secondaryMediaUrl, targetResourceId);
+	}
 
 
     public static Notification buildTagRequestNotification(String username, String title, String primaryMediaUrl, String secondaryMediaUrl, String targetResourceId) {

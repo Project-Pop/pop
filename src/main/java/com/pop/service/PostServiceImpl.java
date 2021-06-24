@@ -7,7 +7,7 @@ import com.pop.models.JwtUser;
 import com.pop.models.NotificationResponseType;
 import com.pop.models.Posts;
 import com.pop.models.Tagged;
-import com.pop.utils.MediaUrlBuilder;
+import com.pop.utils.MediaFilenameBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -31,12 +31,15 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private SqsService sqsService;
+
     public boolean amITheOwnerOfThisPost(String postId) {
         var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principalUser.getUsername();
         return (username == postsDao.getOwnerOfPost(postId));
     }
-    
+
 
     @Override
     public Response createPost(NewPostDto newPostDto, MultipartFile image, MultipartFile minImage) {
@@ -55,20 +58,22 @@ public class PostServiceImpl implements PostService {
                     new Date(),
                     0
             );
-            storageService.uploadFile(image, newPost.getPostId());
+            String postImageFilename = MediaFilenameBuilder.buildPostMediaFilename(newPost.getPostId());
+            String postImageUrl = storageService.uploadFile(image, postImageFilename);
+            newPost.setImageUrl(postImageUrl);
+
             newPost.setTaggedUsers(newPostDto.getTaggedUsers().stream().map(usernameDto -> new Tagged(usernameDto.getUsername(), newPost.getPostId())).collect(Collectors.toList()));
             postsDao.createPost(newPost);
 
             // sending tagged notification to all tagged users
-            var taggedUsernames = newPostDto.getTaggedUsers().stream().map(usernameDto -> usernameDto.getUsername()).collect(Collectors.toList());
-            taggedUsernames.forEach(
-                    username -> notificationService.
-                            buildTagRequestNotification(
-                                    username,
-                                    newPost.getPostId(),
-                                    MediaUrlBuilder.buildPostMediaUrl(newPost.getPostId())
-                            )
+            notificationService.buildTagRequestNotification(
+                    newPostDto.getTaggedUsers(),
+                    newPost.getPostId(),
+                    newPost.getImageUrl()
             );
+
+            // sending this post for feed generation
+            sqsService.sendPostForFeedGeneration(principalUsername, newPost.getPostId(), newPost.getImageUrl(),newPost.getTimeStamp());
 
             return new Response(newPost, "post created successfully", HttpServletResponse.SC_CREATED);
 
@@ -102,7 +107,7 @@ public class PostServiceImpl implements PostService {
     public Response getPostDetails(String postId) {
         try {
             // if I am not the owner of post, then only approved tagged users are fetched
-            Posts post = postsDao.getPostByPostId(postId, amITheOwnerOfThisPost(postId) == false,((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+            Posts post = postsDao.getPostByPostId(postId, amITheOwnerOfThisPost(postId) == false, ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
             return new Response(post, "Post fetched", HttpServletResponse.SC_OK);
         } catch (Exception err) {
             return Response.error(err.toString(), HttpServletResponse.SC_BAD_REQUEST);
@@ -159,7 +164,8 @@ public class PostServiceImpl implements PostService {
                     postsDao.getOwnerOfPost(postId),
                     notificationResponseType,
                     postId,
-                    MediaUrlBuilder.buildPostMediaUrl(postId));
+                    storageService.getMediaUrlFromFilename(MediaFilenameBuilder.buildPostMediaFilename(postId))
+            );
 
             String responseMessage = status ? "Accepted" : "Denied";
             return Response.ok(responseMessage, HttpServletResponse.SC_ACCEPTED);
@@ -197,7 +203,8 @@ public class PostServiceImpl implements PostService {
                 notificationService.buildPostReactionNotification(
                         postsDao.getOwnerOfPost(postId),
                         postId,
-                        MediaUrlBuilder.buildPostMediaUrl(postId));
+                        storageService.getMediaUrlFromFilename(MediaFilenameBuilder.buildPostMediaFilename(postId)),
+                        postsDao.getOwnerOfPost(postId));
 
                 return Response.ok("Reacted", HttpServletResponse.SC_CREATED);
             } else {

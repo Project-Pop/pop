@@ -6,7 +6,7 @@ import com.pop.dao.PostsDao;
 import com.pop.dto.CommentDto;
 import com.pop.models.Comments;
 import com.pop.models.JwtUser;
-import com.pop.utils.MediaUrlBuilder;
+import com.pop.utils.MediaFilenameBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -26,6 +26,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private StorageService storageService;
 
     public boolean amITheOwnerOfThisComment(String commentId) {
         var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -53,13 +56,14 @@ public class CommentServiceImpl implements CommentService {
         Comments comment = new Comments(commentId, username, postId, 0, commentDto.getMessage());
         try {
             commentsDao.addComment(comment);
-
+            var postOwner = postsDao.getOwnerOfPost(postId);
             // sending notification
             notificationService.buildCommentNotification(
-                    postsDao.getOwnerOfPost(postId),
+                    postOwner,
                     commentDto.getMessage(),
                     postId,
-                    MediaUrlBuilder.buildPostMediaUrl(postId));
+                    storageService.getMediaUrlFromFilename(MediaFilenameBuilder.buildPostMediaFilename(postId)),
+                    postOwner);
 
         } catch (Exception e) {
             return Response.error(e.getCause().getMessage(), HttpServletResponse.SC_BAD_REQUEST);
@@ -108,7 +112,7 @@ public class CommentServiceImpl implements CommentService {
                     commentData.getUsername(),
                     commentData.getMessage(),
                     commentData.getPostId(),
-                    MediaUrlBuilder.buildPostMediaUrl(commentData.getPostId())
+                    storageService.getMediaUrlFromFilename(MediaFilenameBuilder.buildPostMediaFilename(commentData.getPostId()))
             );
 
         } catch (Exception e) {
