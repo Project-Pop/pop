@@ -51,6 +51,31 @@ public class UserController {
 
     }
 
+    @PostMapping("/device-token")
+    void registerDeviceToken(@RequestParam String deviceToken, HttpServletResponse response) throws IOException {
+        var res = userService.registerUserDeviceToken(deviceToken);
+
+
+        if (res.isContainsError()) {
+            response.sendError(res.getCode(), res.getError());
+        } else {
+            response.setStatus(res.getCode());
+        }
+        return;
+    }
+
+    @DeleteMapping("/device-token")
+    void deleteDeviceToken(HttpServletResponse response) throws IOException {
+        var res = userService.disableUserDeviceToken();
+
+        if (res.isContainsError()) {
+            response.sendError(res.getCode(), res.getError());
+        } else {
+            response.setStatus(res.getCode());
+        }
+        return;
+    }
+
     @GetMapping("/username-availability")
     boolean isUsernameAvailable(@RequestBody UsernameDto usernameDto, HttpServletResponse response) throws IOException {
         var res = userService.isUsernameAvailable(usernameDto.getUsername());

@@ -5,9 +5,11 @@ import com.amazonaws.services.sns.model.CreatePlatformEndpointRequest;
 import com.amazonaws.services.sns.model.SetEndpointAttributesRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
+@Service
 public class SnsServiceImpl implements SnsService {
 
     @Autowired

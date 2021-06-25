@@ -6,7 +6,10 @@ import com.pop.dao.UserProfileDao;
 import com.pop.dto.PatchUserDto;
 import com.pop.dto.SignUpUserDto;
 import com.pop.models.JwtUser;
+import com.pop.models.SnsEndpoint;
 import com.pop.models.User;
+import com.pop.service.AwsClientService.DynamoDBService;
+import com.pop.service.AwsClientService.SnsService;
 import com.pop.service.AwsClientService.StorageService;
 import com.pop.service.NotificationService.NotificationService;
 import com.pop.utils.MediaFilenameBuilder;
@@ -33,6 +36,12 @@ public class UserSeriveImpl implements UserService {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private DynamoDBService dynamoDBService;
+
+    @Autowired
+    private SnsService snsService;
 
     @Override
     public Response isUsernameAvailable(String username) {
@@ -95,7 +104,44 @@ public class UserSeriveImpl implements UserService {
 
     @Override
     public Response registerUserDeviceToken(String deviceToken) {
-        return null;
+        var principalUsername = ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        SnsEndpoint oldSnsData = dynamoDBService.fetchUserDeviceTokenInfo(principalUsername);
+
+
+        if (oldSnsData != null && oldSnsData.getDeviceToken() == deviceToken && oldSnsData.isEnabled()) {
+            return Response.ok("Device token is already registered", HttpServletResponse.SC_ACCEPTED);
+        }
+
+        if (oldSnsData == null) {
+            String endpointArn = snsService.registerNewDeviceToken(deviceToken);
+
+            dynamoDBService.putUserDeviceToken(principalUsername, new SnsEndpoint(deviceToken, endpointArn, true));
+
+        } else {
+            // if there already exists a platform endpoint (user is not brand new)
+            oldSnsData.setDeviceToken(deviceToken);
+            oldSnsData.setEnabled(true);
+
+            snsService.updateDeviceToken(oldSnsData.getEndpointArn(), deviceToken);
+
+            dynamoDBService.updateUserDeviceToken(principalUsername, oldSnsData);
+
+        }
+
+        return Response.ok("Device token registered successfully", HttpServletResponse.SC_CREATED);
+
+    }
+
+    @Override
+    public Response disableUserDeviceToken() {
+        var principalUsername = ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        SnsEndpoint oldSnsData = dynamoDBService.fetchUserDeviceTokenInfo(principalUsername);
+
+        snsService.disableDeviceToken(oldSnsData.getEndpointArn());
+
+        dynamoDBService.disableUserDeviceToken(principalUsername);
+
+        return Response.ok("Disabled device token", HttpServletResponse.SC_OK);
     }
 
     @Override
