@@ -3,10 +3,8 @@ package com.pop.service.PostService;
 import com.pop.common.Response;
 import com.pop.dao.PostsDao;
 import com.pop.dto.*;
-import com.pop.models.JwtUser;
-import com.pop.models.NotificationResponseType;
-import com.pop.models.Posts;
-import com.pop.models.Tagged;
+import com.pop.models.*;
+import com.pop.service.AwsClientService.DynamoDBService;
 import com.pop.service.AwsClientService.SqsService;
 import com.pop.service.AwsClientService.StorageService;
 import com.pop.service.NotificationService.NotificationService;
@@ -37,12 +35,24 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private SqsService sqsService;
 
-    public boolean amITheOwnerOfThisPost(String postId) {
+    @Autowired
+    private DynamoDBService dynamoDBService;
+
+    private boolean amITheOwnerOfThisPost(String postId) {
         var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principalUser.getUsername();
         return (username == postsDao.getOwnerOfPost(postId));
     }
 
+
+    @Override
+    public Response getHomeFeed() {
+        var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principalUser.getUsername();
+
+        List<FeedItem> feed = dynamoDBService.fetchUserFeed(username);
+        return new Response(feed, "User home feed", HttpServletResponse.SC_OK);
+    }
 
     @Override
     public Response createPost(NewPostDto newPostDto, MultipartFile image, MultipartFile minImage) {
@@ -76,7 +86,7 @@ public class PostServiceImpl implements PostService {
             );
 
             // sending this post for feed generation
-            sqsService.sendPostForFeedGeneration(principalUsername, newPost.getPostId(), newPost.getImageUrl(),newPost.getTimeStamp());
+            sqsService.sendPostForFeedGeneration(principalUsername, newPost.getPostId(), newPost.getImageUrl(), newPost.getTimeStamp());
 
             return new Response(newPost, "post created successfully", HttpServletResponse.SC_CREATED);
 

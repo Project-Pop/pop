@@ -3,6 +3,7 @@ package com.pop.controller;
 import com.pop.common.Response;
 import com.pop.dto.*;
 import com.pop.models.Comments;
+import com.pop.models.FeedItem;
 import com.pop.models.Posts;
 import com.pop.service.PostService.CommentService;
 import com.pop.service.PostService.PostService;
@@ -31,7 +32,7 @@ public class PostController {
 
     @PostMapping("/")
     public NewPostDto postPost(@RequestBody NewPostDto newPostDto, MultipartFile image, MultipartFile miniImage, HttpServletResponse response) throws IOException {
-    	
+
         Response res = postService.createPost(newPostDto, image, miniImage);
         if (res.isContainsError()) {
             response.sendError(res.getCode(), res.getError());
@@ -44,8 +45,16 @@ public class PostController {
 
 
     @GetMapping("/home")
-    void getHomeFeed(HttpServletResponse response) throws IOException {
-        return;
+    List<FeedItem> getHomeFeed(HttpServletResponse response) throws IOException {
+        Response res = postService.getHomeFeed();
+        if (res.isContainsError()) {
+            response.sendError(res.getCode(), res.getError());
+        } else {
+            response.setStatus(res.getCode());
+        }
+
+        return (List<FeedItem>) res.getData();
+
     }
 
 

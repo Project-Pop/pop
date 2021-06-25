@@ -11,7 +11,7 @@ public interface PostService {
 
     public Response createPost(NewPostDto newPostDto, MultipartFile normalImage, MultipartFile miniImage);
 
-//    public Response getHomeFeed();
+    public Response getHomeFeed();
 
     public Response getUserPosts(String username);
 
