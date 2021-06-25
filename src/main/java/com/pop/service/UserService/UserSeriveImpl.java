@@ -94,6 +94,11 @@ public class UserSeriveImpl implements UserService {
     }
 
     @Override
+    public Response registerUserDeviceToken(String deviceToken) {
+        return null;
+    }
+
+    @Override
     public Response getUserProfile(String username) {
         try {
             User u = userDao.getUserByUsername(username);

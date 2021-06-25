@@ -10,6 +10,8 @@ import com.pop.dto.SignUpUserDto;
 public interface UserService {
 
     public Response signUpNewUser(SignUpUserDto signUpUserDto);
+
+    public Response registerUserDeviceToken(String deviceToken);
     
 	public void updateUserImage(MultipartFile image, MultipartFile miniImage);
 
