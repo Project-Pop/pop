@@ -7,6 +7,8 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.sns.AmazonSNS;
+import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,15 +34,20 @@ public class AwsSDKConfig {
                 .withRegion(region).build();
     }
 
- 
+
     @Bean
     public AmazonSQS sqsClient() {
         return AmazonSQSClientBuilder.defaultClient();
     }
 
     @Bean
-    public AmazonDynamoDB dynamoDBClient(){
+    public AmazonDynamoDB dynamoDBClient() {
         return AmazonDynamoDBClientBuilder.defaultClient();
+    }
+
+    @Bean
+    public AmazonSNS snsClient() {
+        return AmazonSNSClientBuilder.defaultClient();
     }
 
 }
