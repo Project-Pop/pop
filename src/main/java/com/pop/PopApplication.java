@@ -11,6 +11,7 @@ import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -22,7 +23,8 @@ import javax.sql.DataSource;
 
 import static com.nimbusds.jose.JWSAlgorithm.RS256;
 
-@SpringBootApplication(scanBasePackages = {"com.pop", "com.pop.config", "com.pop.controller", "com.pop.dao"})
+@SpringBootApplication(scanBasePackages = {"com.pop", "com.pop.config", "com.pop.controller", "com.pop.dao","com.pop.filter","com.pop.service","com.pop.utils"})
+@PropertySource("classpath:profiles/${spring.profiles.active}/application.properties")
 public class PopApplication {
 
     public static void main(String[] args) {
