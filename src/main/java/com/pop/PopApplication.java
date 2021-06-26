@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.net.MalformedURLException;
 import java.net.URL;

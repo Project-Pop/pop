@@ -76,7 +76,7 @@ public class UserController {
         return;
     }
 
-    @GetMapping("/username-availability")
+    @PostMapping("/username-availability")
     boolean isUsernameAvailable(@RequestBody UsernameDto usernameDto, HttpServletResponse response) throws IOException {
         var res = userService.isUsernameAvailable(usernameDto.getUsername());
         if (res.isContainsError()) {
