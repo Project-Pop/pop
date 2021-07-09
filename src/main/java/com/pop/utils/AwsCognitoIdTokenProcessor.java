@@ -25,37 +25,26 @@ public class AwsCognitoIdTokenProcessor {
     private ConfigurableJWTProcessor configurableJWTProcessor;
 
     public Authentication authenticate(HttpServletRequest request) throws Exception {
-        List<GrantedAuthority> grantedAuthorities = of(new SimpleGrantedAuthority("ROLE_USER"));
-//TODO: GET userId and phone from jwt token and fetch username by userId then to set the username in JwtUser.
-        JwtUser user = new JwtUser("addyUrDaddy", "+91daddy");
-        user.setUsername("addaddy");
-        return new JwtAuthentication(user, null, grantedAuthorities);
-//        String idToken = request.getHeader(this.jwtConfiguration.getHttpHeader());
-//
-//        System.out.println(idToken);
-//        if (idToken != null) {
-//        	try {
-//            JWTClaimsSet claims = this.configurableJWTProcessor
-//                    .process(this.getBearerToken(idToken), null);
-//        	} catch (Exception e) {
-//        		
-//				// TODO: handle exception
-//			}
-////            validateIssuer(claims);
-////            verifyIdToken(claims);
-//            
-//            String userId = "!23";
-//            System.out.println(userId);
-//            if (userId != null) {
-//
-//                //TODO: fetch user summary from database based on userId.
-//                List<GrantedAuthority> grantedAuthorities = of( new SimpleGrantedAuthority("ROLE_USER"));
-//                UserSummary userSummary = new UserSummary("1","Mohit","__mohit__","none");
-//                return new JwtAuthentication(userSummary, claims, grantedAuthorities);
-//
-//            }
-//        }
-//        return null;
+
+        String idToken = request.getHeader(this.jwtConfiguration.getHttpHeader());
+
+        System.out.println(idToken);
+
+        JWTClaimsSet claims = this.configurableJWTProcessor
+                .process(this.getBearerToken(idToken), null);
+
+        validateIssuer(claims);
+        isIdToken(claims);
+
+
+        String userId = claims.getClaims().get(this.jwtConfiguration.getUserIdField()).toString();
+        String phone = claims.getClaims().get(this.jwtConfiguration.getPhoneField()).toString();
+
+
+        JwtUser principalUser = new JwtUser(userId, phone);
+
+        return new JwtAuthentication(principalUser, claims, null);
+
     }
 
 
@@ -65,8 +54,9 @@ public class AwsCognitoIdTokenProcessor {
                 .toString();
     }
 
-    private void verifyIdToken(JWTClaimsSet claims) throws Exception {
-        if (!claims.getIssuer().equals(this.jwtConfiguration.getCognitoIdentityPoolUrl())) {
+
+    private void isIdToken(JWTClaimsSet claims) throws Exception {
+        if (!claims.getClaim("token_use").equals("id")) {
             throw new Exception("Not an ID Token");
         }
     }

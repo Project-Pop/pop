@@ -1,6 +1,7 @@
 package com.pop.config;
 
 import com.pop.filter.AwsCognitoJwtAuthFilter;
+import com.pop.filter.PopulateUserDataFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private AwsCognitoJwtAuthFilter awsCognitoJwtAuthFilter;
 
+    @Autowired
+    private PopulateUserDataFilter populateUserDataFilter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -25,6 +29,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(awsCognitoJwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(awsCognitoJwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(populateUserDataFilter, UsernamePasswordAuthenticationFilter.class)
+        ;
     }
 }

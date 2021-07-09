@@ -23,7 +23,7 @@ public class AwsCognitoJwtAuthFilter extends OncePerRequestFilter {
     private AwsCognitoIdTokenProcessor cognitoIdTokenProcessor;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Authentication authentication;
         try {
             authentication = this.cognitoIdTokenProcessor.authenticate((HttpServletRequest) request);
@@ -36,6 +36,6 @@ public class AwsCognitoJwtAuthFilter extends OncePerRequestFilter {
             SecurityContextHolder.clearContext();
         }
 
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 }

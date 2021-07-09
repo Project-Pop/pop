@@ -14,6 +14,7 @@ public class JwtConfiguration {
     private String jwkUrl;
     private String region = "ap-south-1";
     private String userIdField = "cognito:username";
+    private String phoneField = "phone_number";
     private String httpHeader = "Authorization";
 
     public String getJwkUrl(){
@@ -56,7 +57,11 @@ public class JwtConfiguration {
 		this.userIdField = userIdField;
 	}
 
-	public String getHttpHeader() {
+    public String getPhoneField() {
+        return phoneField;
+    }
+
+    public String getHttpHeader() {
 		return httpHeader;
 	}
 

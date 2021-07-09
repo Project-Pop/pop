@@ -9,6 +9,7 @@ import com.pop.models.User;
 import com.pop.service.UserService.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/avatar")
-    void uploadImage( MultipartFile image, MultipartFile miniImage) {
+    void uploadImage(MultipartFile image, MultipartFile miniImage) {
         userService.updateUserImage(image, miniImage);
     }
 
@@ -79,7 +80,7 @@ public class UserController {
     }
 
     @PostMapping("/username-availability")
-    boolean isUsernameAvailable(@RequestParam  String username, HttpServletResponse response) throws IOException {
+    boolean isUsernameAvailable(@RequestParam String username, HttpServletResponse response) throws IOException {
         var res = userService.isUsernameAvailable(username);
         if (res.isContainsError()) {
             response.sendError(res.getCode(), res.getError());
