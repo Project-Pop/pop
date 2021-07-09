@@ -7,6 +7,7 @@ import com.pop.dto.UsernameDto;
 import com.pop.models.Notification;
 import com.pop.models.User;
 import com.pop.service.UserService.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+@ApiOperation(value = "/v1/users", tags = "User controller")
 @RestController
 @RequestMapping("/v1/users")
 public class UserController {
@@ -31,8 +33,8 @@ public class UserController {
         } else response.setStatus(res.getCode());
     }
 
-    @PostMapping("/updateImage")
-    void uploadImage(MultipartFile image, MultipartFile miniImage) {
+    @PostMapping("/avatar")
+    void uploadImage( MultipartFile image, MultipartFile miniImage) {
         userService.updateUserImage(image, miniImage);
     }
 
@@ -77,8 +79,8 @@ public class UserController {
     }
 
     @PostMapping("/username-availability")
-    boolean isUsernameAvailable(@RequestBody UsernameDto usernameDto, HttpServletResponse response) throws IOException {
-        var res = userService.isUsernameAvailable(usernameDto.getUsername());
+    boolean isUsernameAvailable(@RequestParam  String username, HttpServletResponse response) throws IOException {
+        var res = userService.isUsernameAvailable(username);
         if (res.isContainsError()) {
             response.sendError(res.getCode(), res.getError());
         } else {

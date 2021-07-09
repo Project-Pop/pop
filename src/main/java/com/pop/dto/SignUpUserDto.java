@@ -1,5 +1,7 @@
 package com.pop.dto;
 
+import io.swagger.annotations.ApiOperation;
+
 import java.util.Date;
 
 public class SignUpUserDto {
@@ -9,15 +11,12 @@ public class SignUpUserDto {
     private String phone;
     private Date dob;
 
-    private String avatar;
-
-    public SignUpUserDto(String username, String fullname, String email, String phone, Date dob, String avatar) {
+    public SignUpUserDto(String username, String fullname, String email, String phone, Date dob) {
         this.username = username;
         this.fullname = fullname;
         this.email = email;
         this.phone = phone;
         this.dob = dob;
-        this.avatar = avatar;
     }
 
     public String getUsername() {
@@ -60,11 +59,4 @@ public class SignUpUserDto {
         this.dob = dob;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
 }

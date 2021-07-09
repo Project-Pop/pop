@@ -37,17 +37,30 @@ public class AwsSDKConfig {
 
     @Bean
     public AmazonSQS sqsClient() {
-        return AmazonSQSClientBuilder.defaultClient();
+        AWSCredentials credentials = new BasicAWSCredentials(accessKey, accessSecret);
+        return AmazonSQSClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(region).build();
+
     }
 
     @Bean
     public AmazonDynamoDB dynamoDBClient() {
-        return AmazonDynamoDBClientBuilder.defaultClient();
+        AWSCredentials credentials = new BasicAWSCredentials(accessKey, accessSecret);
+
+        return AmazonDynamoDBClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(region).build();
     }
 
     @Bean
     public AmazonSNS snsClient() {
-        return AmazonSNSClientBuilder.defaultClient();
+
+        AWSCredentials credentials = new BasicAWSCredentials(accessKey, accessSecret);
+
+        return AmazonSNSClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(region).build();
     }
 
 }

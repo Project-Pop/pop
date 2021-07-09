@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 
 import static com.nimbusds.jose.JWSAlgorithm.RS256;
 
-@SpringBootApplication(scanBasePackages = {"com.pop", "com.pop.config", "com.pop.controller", "com.pop.dao","com.pop.filter","com.pop.service","com.pop.utils"})
+@SpringBootApplication()
 @PropertySource("classpath:profiles/${spring.profiles.active}/application.properties")
 public class PopApplication {
 
