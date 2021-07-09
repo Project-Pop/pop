@@ -2,6 +2,7 @@ package com.pop.dao;
 
 import java.util.List;
 
+import com.pop.dto.UsernameDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -95,7 +96,7 @@ public class UserDaoImpl implements UserDao{
 	public String getUsernameByUserId(String userId) {
 		 String sql = "SELECT username FROM Users WHERE userId = ?";
          return  jt.queryForObject(sql,
-                 new BeanPropertyRowMapper<String>(String.class), userId);
+                 new BeanPropertyRowMapper<UsernameDto>(UsernameDto.class), userId).getUsername();
 	}
 
 	@Override

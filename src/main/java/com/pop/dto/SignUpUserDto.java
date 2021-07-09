@@ -1,21 +1,23 @@
 package com.pop.dto;
 
-import io.swagger.annotations.ApiOperation;
+import org.springframework.lang.Nullable;
 
 import java.util.Date;
 
 public class SignUpUserDto {
     private String username;
     private String fullname;
+
+    @Nullable
     private String email;
-    private String phone;
+
+    @Nullable
     private Date dob;
 
-    public SignUpUserDto(String username, String fullname, String email, String phone, Date dob) {
+    public SignUpUserDto(String username, String fullname, String email, Date dob) {
         this.username = username;
         this.fullname = fullname;
         this.email = email;
-        this.phone = phone;
         this.dob = dob;
     }
 
@@ -41,14 +43,6 @@ public class SignUpUserDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public Date getDob() {

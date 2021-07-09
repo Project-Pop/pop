@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 import static java.util.List.of;
@@ -35,7 +36,7 @@ public class AwsCognitoIdTokenProcessor {
 
         validateIssuer(claims);
         isIdToken(claims);
-
+        isNotExpired(claims);
 
         String userId = claims.getClaims().get(this.jwtConfiguration.getUserIdField()).toString();
         String phone = claims.getClaims().get(this.jwtConfiguration.getPhoneField()).toString();
@@ -54,6 +55,11 @@ public class AwsCognitoIdTokenProcessor {
                 .toString();
     }
 
+    private void isNotExpired(JWTClaimsSet claims) throws Exception {
+        if (!(claims.getExpirationTime().compareTo(new Date()) > 0)) {
+            throw new Exception("Token is expired");
+        }
+    }
 
     private void isIdToken(JWTClaimsSet claims) throws Exception {
         if (!claims.getClaim("token_use").equals("id")) {
