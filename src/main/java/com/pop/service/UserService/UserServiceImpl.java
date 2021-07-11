@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
         } catch (DataAccessException e) {
             return Response.error(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
-        return new Response(user, "USER ADDED", HttpServletResponse.SC_OK);
+        return new Response(getUserProfile(newUser.getUsername()).getData(), "USER ADDED", HttpServletResponse.SC_CREATED);
     }
 
     @Override

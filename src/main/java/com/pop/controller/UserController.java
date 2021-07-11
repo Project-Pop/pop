@@ -28,11 +28,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/")
-    void signUpNewUser(@RequestBody SignUpUserDto user, HttpServletResponse response) throws IOException {
+    User signUpNewUser(@RequestBody SignUpUserDto user, HttpServletResponse response) throws IOException {
         var res = userService.signUpNewUser(user);
         if (res.isContainsError()) {
             response.sendError(res.getCode(), res.getError());
         } else response.setStatus(res.getCode());
+
+        return (User) res.getData();
     }
 
     @PostMapping("/avatar")
