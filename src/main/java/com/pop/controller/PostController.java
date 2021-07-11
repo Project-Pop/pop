@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@ApiOperation(value = "/v1/posts", tags = "Post Controller")
+@ApiOperation(value = "/posts", tags = "Post Controller")
 @RestController
-@RequestMapping("/v1/posts")
+@RequestMapping("/posts")
 public class PostController {
 
     @Autowired

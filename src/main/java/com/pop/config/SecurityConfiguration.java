@@ -19,13 +19,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private PopulateUserDataFilter populateUserDataFilter;
 
+    private final String[] AUTH_WHITELIST = {"/v2/api-docs",
+            "/configuration/ui",
+            "/swagger-resources/**",
+            "/configuration/**",
+            "/swagger-ui.html",
+            "/webjars/**"};
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.headers().cacheControl();
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/**").authenticated()
+                .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

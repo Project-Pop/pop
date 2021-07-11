@@ -4,6 +4,7 @@ import com.pop.common.Response;
 import com.pop.dto.PatchUserDto;
 import com.pop.dto.SignUpUserDto;
 import com.pop.dto.UsernameDto;
+import com.pop.models.JwtUser;
 import com.pop.models.Notification;
 import com.pop.models.User;
 import com.pop.service.UserService.UserService;
@@ -18,9 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@ApiOperation(value = "/v1/users", tags = "User controller")
+@ApiOperation(value = "/users", tags = "User controller")
 @RestController
-@RequestMapping("/v1/users")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -52,6 +53,17 @@ public class UserController {
 
         return (PatchUserDto) res.getData();
 
+    }
+
+    @GetMapping("/")
+    User getPrincipalUserProfile(HttpServletResponse response) throws IOException {
+        Response res = userService.getPrincipalUserProfile();
+        if (res.isContainsError()) {
+            response.sendError(res.getCode(), res.getError());
+        }
+//        System.out.println(res.getData());
+
+        return (User) res.getData();
     }
 
     @PostMapping("/device-token")

@@ -155,6 +155,15 @@ public class UserSeriveImpl implements UserService {
     }
 
     @Override
+    public Response getPrincipalUserProfile() {
+        JwtUser princiaplUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = princiaplUser.getUsername();
+        if(username == null || username == ""){
+            return Response.error("User data not found",HttpServletResponse.SC_NOT_FOUND);
+        }else return getUserProfile(username);
+    }
+
+    @Override
     public Response followUser(String username) {
         var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String myUsername = principalUser.getUsername();

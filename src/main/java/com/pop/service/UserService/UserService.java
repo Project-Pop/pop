@@ -24,6 +24,9 @@ public interface UserService {
 
     public Response getUserProfile(String username);
 
+    public Response getPrincipalUserProfile();
+
+
 //    public Response searchUsers(String searchString);
 
     public Response getUserActivities();
