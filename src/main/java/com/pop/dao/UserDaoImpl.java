@@ -33,19 +33,6 @@ public class UserDaoImpl implements UserDao{
 
 
 	@Override
-	public User getUserByUserId(String userId) {
-		 try {
-	            String sql = "SELECT * FROM Users WHERE userId = ?";
-	            return  jt.queryForObject(sql,
-	                    new BeanPropertyRowMapper<User>(User.class), 
-	                    userId);
-        } catch (EmptyResultDataAccessException e) {
-	            return null;
-        }
-	}
-
-
-	@Override
 	public boolean exists(String phoneNo) {
 		String sql = "SELECT count(*) FROM Users WHERE phoneNo = ? ";
 		int count = jt.queryForObject(sql, new Object[] { phoneNo }, Integer.class);
@@ -91,7 +78,12 @@ public class UserDaoImpl implements UserDao{
 		jt.update(sql, user.getFullname(), user.getEmail(), user.getUserId());
 	}
 
-	
+	@Override
+	public List<User> searchUserByName(String searchString) {
+		String sql = "SELECT username,fullname FROM Users WHERE username LIKE \"%" + searchString + "%\"";
+		return jt.query(sql, new BeanPropertyRowMapper<User>(User.class));
+	}
+
 	@Override
 	public String getUsernameByUserId(String userId) {
 		 String sql = "SELECT username FROM Users WHERE userId = ?";

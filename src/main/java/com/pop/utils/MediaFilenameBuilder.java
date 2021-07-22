@@ -3,31 +3,33 @@ package com.pop.utils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.print.attribute.standard.Media;
 import java.util.UUID;
 
 @Component
 public class MediaFilenameBuilder {
 
     @Value("${application.mediaUrl.basePrefix}")
-    private static String basePrefix;
+    private String basePrefix;
 
-    private static String userPrefix = "userAvatar";
-    private static String postPrefix = "postMedia";
+    private String userPrefix = "userAvatar";
+    private String postPrefix = "postMedia";
 
+    private static MediaFilenameBuilder instance = new MediaFilenameBuilder();
 
     public static String buildUserStaticImageFilename(String username) {
-        return basePrefix + "/" + userPrefix + "/" + username;
+        return instance.basePrefix + "/" + instance.userPrefix + "/" + username;
     }
 
     /*
     This returns new filename to update the avatar of currently logged in user
      */
     public static String buildUserDynamicImageFilename() {
-        return basePrefix + "/" + userPrefix + "/" + UUID.randomUUID().toString();
+        return instance.basePrefix + "/" + instance.userPrefix + "/" + UUID.randomUUID().toString();
     }
 
     public static String buildPostMediaFilename(String postId) {
-        return basePrefix + "/" + postPrefix + "/" + postId;
+        return instance.basePrefix + "/" + instance.postPrefix + "/" + postId;
     }
 
 }

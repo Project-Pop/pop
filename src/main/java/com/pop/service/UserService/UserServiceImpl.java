@@ -3,11 +3,13 @@ package com.pop.service.UserService;
 import com.pop.common.Response;
 import com.pop.dao.UserDao;
 import com.pop.dao.UserProfileDao;
+import com.pop.dto.MinimalUserDto;
 import com.pop.dto.PatchUserDto;
 import com.pop.dto.SignUpUserDto;
 import com.pop.models.JwtUser;
 import com.pop.models.SnsEndpoint;
 import com.pop.models.User;
+import com.pop.models.UserProfile;
 import com.pop.service.AwsClientService.DynamoDBService;
 import com.pop.service.AwsClientService.SnsService;
 import com.pop.service.AwsClientService.StorageService;
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -54,6 +58,8 @@ public class UserServiceImpl implements UserService {
         User updatedUser = new User();
         var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var oldUser = userDao.getUserByUsername(principalUser.getUsername());
+
+        updatedUser.setUserId(oldUser.getUserId());
 
         if (patchUserDto.getFullname() != null) {
             updatedUser.setFullname(patchUserDto.getFullname());
@@ -158,9 +164,9 @@ public class UserServiceImpl implements UserService {
     public Response getPrincipalUserProfile() {
         JwtUser princiaplUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = princiaplUser.getUsername();
-        if(username == null || username == ""){
-            return Response.error("User data not found",HttpServletResponse.SC_NOT_FOUND);
-        }else return getUserProfile(username);
+        if (username == null || username == "") {
+            return Response.error("User data not found", HttpServletResponse.SC_NOT_FOUND);
+        } else return getUserProfile(username);
     }
 
     @Override
@@ -210,6 +216,25 @@ public class UserServiceImpl implements UserService {
 // uploading thumbnail purpose profile image
         String thumbnailFilename = MediaFilenameBuilder.buildUserStaticImageFilename(myUsername);
         storageService.uploadFile(miniImage, thumbnailFilename);
+    }
+
+    @Override
+    public Response searchUsers(String searchString) {
+
+        try {
+            List<User> users = userDao.searchUserByName(searchString);
+            var listWithAvatar = users.stream().map(user -> {
+                var minimalUser = new MinimalUserDto(
+                        user.getUsername(),
+                        user.getFullname(),
+                        storageService.getMediaUrlFromFilename(MediaFilenameBuilder.buildUserStaticImageFilename(user.getUsername()))
+                );
+                return minimalUser;
+            }).collect(Collectors.toList());
+            return new Response(users, "QUERY FETCHED", HttpServletResponse.SC_OK);
+        } catch (Exception e) {
+            return Response.error(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 
     @Override

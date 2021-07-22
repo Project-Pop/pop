@@ -7,15 +7,18 @@ CREATE TABLE Users (
     fullname VARCHAR(50),
     email VARCHAR(100) UNIQUE,
     phone VARCHAR(13) UNIQUE NOT NULL,
-    dob DATE 
+    dob DATE,
+    INDEX (username)
 );
 CREATE TABLE UserProfile(
 	username VARCHAR(25) PRIMARY KEY,
     imageUrl VARCHAR(100),
-    views int default(0),
-    reacts int default(0),
-    popScore int default(0),
+    views int default 0,
+    reacts int default 0,
+    popScore int default 0,
     bio VARCHAR(1000),
+    followers int default 0,
+    following int default 0,
     FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE
 );
 
@@ -23,7 +26,7 @@ CREATE TABLE Posts(
 	postId CHAR(36) PRIMARY KEY,
     imageUrl varchar(100),
     username VARCHAR(25),
-    views INT DEFAULT(0),
+    views INT DEFAULT 0,
     timeStamp date,
 	FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
     INDEX (username)
@@ -40,7 +43,7 @@ CREATE TABLE UserReactions(
 CREATE TABLE Tagged(
 	postId CHAR(36),
     username VARCHAR(25),
-    approvalStatus bool default(false),
+    approvalStatus bool default false,
 	PRIMARY KEY (postId, username),
     INDEX (username),
     FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
@@ -66,7 +69,7 @@ create table Comments(
 	commentId CHAR(36) PRIMARY KEY,
     postId CHAR(36),
     username VARCHAR(25),
-    likeCount int DEFAULT(0),
+    likeCount int DEFAULT 0,
     message varchar(1000),
     FOREIGN KEY (postId) REFERENCES Posts(postId),
     FOREIGN KEY (username) REFERENCES Users(username),
@@ -81,38 +84,22 @@ create TABLE CommentsReactionCounter(
     FOREIGN KEY (commentId) REFERENCES Comments(commentId) ON DELETE CASCADE
 );
 
-
-CREATE TABLE Notification(
-	notificationId CHAR(36) PRIMARY KEY,
-    username VARCHAR(25),
-    notificationType int,
-	timestamp DATE,
-    title VARCHAR(255),
-    primaryMediaUrl VARCHAR(300),
-    secondaryMediaUrl VARCHAR(300),
-    targetType int,
-    targetResourceId varchar(200),
-    opened bool,
-    expiryTime Date,
-    INDEX (username, timestamp)
-);
-
 CREATE TABLE Notifications(
 	notificationId CHAR(36) PRIMARY KEY,
     username VARCHAR(25),
-    notificationType int,
+    notificationType VARCHAR(30),
 	timestamp DATE,
     title VARCHAR(255),
     primaryMediaUrl VARCHAR(300),
     secondaryMediaUrl VARCHAR(300),
-    targetType int,
-    targetResourceId varchar(200),
+    targetType VARCHAR(20),
+    targetResourceId VARCHAR(200),
     opened bool,
     expiryTime Date,
+
     INDEX (username, timestamp),
+
+    INDEX (notificationType, targetResourceId)
+
     FOREIGN KEY (username) REFERENCES Users(username)
 );
--- drop table Notification;
-ALTER TABLE UserProfile
-ADD COLUMN Bio VARCHAR(1000);
-SELECT * FROM UserProfile;

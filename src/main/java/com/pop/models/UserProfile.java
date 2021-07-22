@@ -4,95 +4,97 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class UserProfile {
-	@NotNull
-	@Size(min=3, max = 25)
+    @NotNull
+    @Size(min = 3, max = 25)
     private String username;
-	int views;
-	int reacts;
-	int popScore;
-	int followers;
-	int following;
-	String bio;
-	public String getBio() {
-		return bio;
-	}
+    int views;
+    int reacts;
+    int popScore;
+    int followers;
+    int following;
+    String bio;
+    String imageUrl;
+
+    public String getBio() {
+        return bio;
+    }
 
 
-	public void setBio(String bio) {
-		this.bio = bio;
-	}
-
-	User user;
-	public UserProfile() {
-		
-	}
-	
-
-	public UserProfile(@NotNull @Size(min = 3, max = 25) String username, int views, int reacts, int popScore,
-			int followers, int following, String bio, User user) {
-		super();
-		this.username = username;
-		this.views = views;
-		this.reacts = reacts;
-		this.popScore = popScore;
-		this.followers = followers;
-		this.following = following;
-		this.bio = bio;
-		this.user = user;
-	}
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
 
 
-	@Override
-	public String toString() {
-		return "UserProfile [username=" + username + ", views=" + views + ", reacts=" + reacts + ", popScore="
-				+ popScore + ", user=" + user + "]";
-	}
+    public UserProfile() {
+    }
 
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	public int getViews() {
-		return views;
-	}
-	public void setViews(int views) {
-		this.views = views;
-	}
-	public int getReacts() {
-		return reacts;
-	}
-	public void setReacts(int reacts) {
-		this.reacts = reacts;
-	}
-	public int getPopScore() {
-		return popScore;
-	}
-	public void setPopScore(int popScore) {
-		this.popScore = popScore;
-	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}	
-	public int getFollowers() {
-		return followers;
-	}
 
-	public void setFollowers(int followers) {
-		this.followers = followers;
-	}
+    public UserProfile(@NotNull @Size(min = 3, max = 25) String username, int views, int reacts, int popScore, int followers, int following, String bio, String imageUrl) {
+        this.username = username;
+        this.views = views;
+        this.reacts = reacts;
+        this.popScore = popScore;
+        this.followers = followers;
+        this.following = following;
+        this.bio = bio;
+        this.imageUrl = imageUrl;
+    }
 
-	public int getFollowing() {
-		return following;
-	}
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-	public void setFollowing(int following) {
-		this.following = following;
-	}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-	
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
+    public int getReacts() {
+        return reacts;
+    }
+
+    public void setReacts(int reacts) {
+        this.reacts = reacts;
+    }
+
+    public int getPopScore() {
+        return popScore;
+    }
+
+    public void setPopScore(int popScore) {
+        this.popScore = popScore;
+    }
+
+    public int getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(int followers) {
+        this.followers = followers;
+    }
+
+    public int getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(int following) {
+        this.following = following;
+    }
+
+
 }

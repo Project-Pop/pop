@@ -1,6 +1,7 @@
 package com.pop.controller;
 
 import com.pop.common.Response;
+import com.pop.dto.MinimalUserDto;
 import com.pop.dto.PatchUserDto;
 import com.pop.dto.SignUpUserDto;
 import com.pop.dto.UsernameDto;
@@ -106,9 +107,14 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    void searchUsers(HttpServletRequest request) {
-        String text = request.getParameter("text");
-        return;
+    List<MinimalUserDto> searchUsers(@RequestParam String searchString, HttpServletResponse response) throws IOException {
+        var res = userService.searchUsers(searchString);
+        if(res.isContainsError()){
+            response.sendError(res.getCode(),res.getError());
+        }else{
+            response.setStatus(res.getCode());
+        }
+        return (List<MinimalUserDto>) res.getData();
     }
 
 
