@@ -175,27 +175,34 @@ public class UserServiceImpl implements UserService {
         String myUsername = principalUser.getUsername();
         try {
             userProfileDao.followUser(username, myUsername);
-
-            //sending notification
-            notificationService.buildFollowNotification(username);
-
         } catch (Exception e) {
             System.out.println(e.getCause().getLocalizedMessage());
             return Response.error(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
-        return Response.ok("You are following ${username}", HttpServletResponse.SC_BAD_REQUEST);
+
+        try {
+            //sending notification
+            // TODO: uncomment when required services is running
+//            notificationService.buildFollowNotification(username);
+        } catch (Exception e) {
+            // not sending this error to client
+            System.out.println(e.getCause().getLocalizedMessage());
+        }
+
+        return Response.ok("You are following ${username}", HttpServletResponse.SC_OK);
     }
 
     @Override
     public Response unfollowUser(String username) {
         var principalUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String myUsername = principalUser.getUsername();
+
         try {
             userProfileDao.unFollowUser(username, myUsername);
         } catch (Exception e) {
             return new Response(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
-        return Response.ok("Succedeed", 400);
+        return Response.ok("Succeeded", HttpServletResponse.SC_OK);
     }
 
     @Override

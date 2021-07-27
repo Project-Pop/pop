@@ -99,7 +99,7 @@ CREATE TABLE Notifications(
 
     INDEX (username, timestamp),
 
-    INDEX (notificationType, targetResourceId)
+    INDEX (notificationType, targetResourceId),
 
     FOREIGN KEY (username) REFERENCES Users(username)
 );

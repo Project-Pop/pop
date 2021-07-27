@@ -20,4 +20,6 @@ public interface UserProfileDao {
 	public void createProfile(String username);
 	public void followUser(String username, String followerUsername);
 	public void unFollowUser(String username, String followerUsername);
+
+	public boolean isFollowing(String username, String followerUsername);
 }
