@@ -9,102 +9,111 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 public class Posts {
-	
-	String postId;
-	@NotNull
-	String imageUrl;
-	@NotNull
-	String username;
+
+    String postId;
+    @NotNull
+    String imageUrl;
+    @NotNull
+    String username;
 
 
-	String description;
+    String description;
 
-	List<Reactions> reactions;
+    List<Reactions> reactions;
 
-	List<Tagged> taggedUsers;
+    List<Tagged> taggedUsers;
 
-	int views;
-	Date timestamp;
-	int likeCount = 0;
+    int views;
+    Date timestamp;
+    int likeCount = 0;
 
-	public Posts(String postId, @NotNull String imageUrl, @NotNull String username, String description, int views, Date timestamp, int likeCount) {
-		super();
-		this.postId = postId;
-		this.imageUrl = imageUrl;
-		this.username = username;
-		this.description  = description;
-		this.views = views;
-		this.timestamp = timestamp;
-		this.likeCount = likeCount;
-	}
+    public Posts() {
+    }
 
-
-	public int getLikeCount() {
-		return likeCount;
-	}
+    public Posts(String postId, @NotNull String imageUrl, @NotNull String username, String description, int views, Date timestamp, int likeCount) {
+        super();
+        this.postId = postId;
+        this.imageUrl = imageUrl;
+        this.username = username;
+        this.description = description;
+        this.views = views;
+        this.timestamp = timestamp;
+        this.likeCount = likeCount;
+    }
 
 
-	public void setLikeCount(int likeCount) {
-		this.likeCount = likeCount;
-	}
+    public int getLikeCount() {
+        return likeCount;
+    }
 
 
-	public String getPostId() {
-		return postId;
-	}
-	public void setPostId(String postId) {
-		this.postId = postId;
-	}
-	public String getImageUrl() {
-		return imageUrl;
-	}
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
 
 
-	public String getDescription() {
-		return description;
-	}
+    public String getPostId() {
+        return postId;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
 
-	public int getViews() {
-		return views;
-	}
-	public void setViews(int views) {
-		this.views = views;
-	}
-	public Date getTimestamp() {
-		return timestamp;
-	}
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
-	
-	public List<Reactions> getReactions() {
-		return reactions;
-	}
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-	public void setReactions(List<Reactions> reactions) {
-		this.reactions = reactions;
-	}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-	public List<Tagged> getTaggedUsers() {
-		return taggedUsers;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setTaggedUsers(List<Tagged> taggedUsers) {
-		this.taggedUsers = taggedUsers;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public List<Reactions> getReactions() {
+        return reactions;
+    }
+
+    public void setReactions(List<Reactions> reactions) {
+        this.reactions = reactions;
+    }
+
+    public List<Tagged> getTaggedUsers() {
+        return taggedUsers;
+    }
+
+    public void setTaggedUsers(List<Tagged> taggedUsers) {
+        this.taggedUsers = taggedUsers;
+    }
 }
