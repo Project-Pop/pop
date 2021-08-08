@@ -31,6 +31,7 @@ public class StorageServiceImpl implements StorageService {
         File fileObj = convertMultiPartFileToFile(file);
         var uploadRes = s3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
+
         fileObj.delete();
 
         return getMediaUrlFromFilename(fileName);
@@ -64,6 +65,7 @@ public class StorageServiceImpl implements StorageService {
 
     private File convertMultiPartFileToFile(MultipartFile file) {
         File convertedFile = new File(file.getOriginalFilename());
+
         try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
             fos.write(file.getBytes());
         } catch (IOException e) {

@@ -22,7 +22,7 @@ public interface UserService {
     public Response isUsernameAvailable(String username);
 
 
-    public Response getUserProfile(String username);
+    public Response getUserProfileRelationalData(String username);
 
     public Response getPrincipalUserProfile();
 

@@ -55,9 +55,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Response createPost(NewPostDto newPostDto, MultipartFile image, MultipartFile minImage) {
+    public Response createPost(NewPostDto newPostDto, MultipartFile hdVideo, MultipartFile thumbVideo) {
 
-        String principalUsername = ((UsernameDto) SecurityContextHolder.getContext()
+        String principalUsername = ((JwtUser) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal())
                 .getUsername();
 
@@ -71,22 +71,22 @@ public class PostServiceImpl implements PostService {
                     new Date(),
                     0
             );
-            String postImageFilename = MediaFilenameBuilder.buildPostMediaFilename(newPost.getPostId());
-            String postImageUrl = storageService.uploadFile(image, postImageFilename);
-            newPost.setImageUrl(postImageUrl);
+            String postHDVideoFilename = MediaFilenameBuilder.buildPostMediaFilename(newPost.getPostId());
+            String postHDVideoUrl = storageService.uploadFile(hdVideo, postHDVideoFilename);
+            newPost.setImageUrl(postHDVideoUrl);
 
             newPost.setTaggedUsers(newPostDto.getTaggedUsers().stream().map(usernameDto -> new Tagged(usernameDto.getUsername(), newPost.getPostId())).collect(Collectors.toList()));
             postsDao.createPost(newPost);
 
             // sending tagged notification to all tagged users
-            notificationService.buildTagRequestNotification(
-                    newPostDto.getTaggedUsers(),
-                    newPost.getPostId(),
-                    newPost.getImageUrl()
-            );
+//            notificationService.buildTagRequestNotification(
+//                    newPostDto.getTaggedUsers(),
+//                    newPost.getPostId(),
+//                    newPost.getImageUrl()
+//            );
 
             // sending this post for feed generation
-            sqsService.sendPostForFeedGeneration(principalUsername, newPost.getPostId(), newPost.getImageUrl(), newPost.getTimeStamp());
+//            sqsService.sendPostForFeedGeneration(principalUsername, newPost.getPostId(), newPost.getImageUrl(), newPost.getTimestamp());
 
             return new Response(newPost, "post created successfully", HttpServletResponse.SC_CREATED);
 

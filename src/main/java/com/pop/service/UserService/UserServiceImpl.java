@@ -6,10 +6,10 @@ import com.pop.dao.UserProfileDao;
 import com.pop.dto.MinimalUserDto;
 import com.pop.dto.PatchUserDto;
 import com.pop.dto.SignUpUserDto;
+import com.pop.dto.UserProfileRelationalDto;
 import com.pop.models.JwtUser;
 import com.pop.models.SnsEndpoint;
 import com.pop.models.User;
-import com.pop.models.UserProfile;
 import com.pop.service.AwsClientService.DynamoDBService;
 import com.pop.service.AwsClientService.SnsService;
 import com.pop.service.AwsClientService.StorageService;
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
         } catch (DataAccessException e) {
             return Response.error(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
-        return new Response(getUserProfile(newUser.getUsername()).getData(), "USER ADDED", HttpServletResponse.SC_CREATED);
+        return new Response(getUserProfileRelationalData(newUser.getUsername()).getData(), "USER ADDED", HttpServletResponse.SC_CREATED);
     }
 
     @Override
@@ -151,10 +151,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Response getUserProfile(String username) {
+    public Response getUserProfileRelationalData(String username) {
+        var principalUsername = ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+
         try {
             User u = userDao.getUserByUsername(username);
-            return new Response(u, "USER FETCHED", HttpServletResponse.SC_OK);
+            boolean isFollowing = userProfileDao.isFollowing(username, principalUsername);
+            var relationalData = new UserProfileRelationalDto(u, isFollowing);
+            return new Response(relationalData, "USER FETCHED", HttpServletResponse.SC_OK);
         } catch (Exception e) {
             return Response.error(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
@@ -166,7 +170,13 @@ public class UserServiceImpl implements UserService {
         String username = princiaplUser.getUsername();
         if (username == null || username == "") {
             return Response.error("User data not found", HttpServletResponse.SC_NOT_FOUND);
-        } else return getUserProfile(username);
+        }
+        try {
+            User u = userDao.getUserByUsername(username);
+            return new Response(u, "USER FETCHED", HttpServletResponse.SC_OK);
+        } catch (Exception e) {
+            return Response.error(e.getCause().getLocalizedMessage(), HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 
     @Override

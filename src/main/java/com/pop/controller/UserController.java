@@ -1,17 +1,12 @@
 package com.pop.controller;
 
 import com.pop.common.Response;
-import com.pop.dto.MinimalUserDto;
-import com.pop.dto.PatchUserDto;
-import com.pop.dto.SignUpUserDto;
-import com.pop.dto.UsernameDto;
-import com.pop.models.JwtUser;
+import com.pop.dto.*;
 import com.pop.models.Notification;
 import com.pop.models.User;
 import com.pop.service.UserService.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,17 +24,18 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/")
-    User signUpNewUser(@RequestBody SignUpUserDto user, HttpServletResponse response) throws IOException {
+    UserProfileRelationalDto signUpNewUser(@RequestBody SignUpUserDto user, HttpServletResponse response) throws IOException {
         var res = userService.signUpNewUser(user);
         if (res.isContainsError()) {
             response.sendError(res.getCode(), res.getError());
         } else response.setStatus(res.getCode());
 
-        return (User) res.getData();
+        return (UserProfileRelationalDto) res.getData();
     }
 
     @PostMapping("/avatar")
-    void uploadImage(MultipartFile image, MultipartFile miniImage) {
+    void uploadImage(MultipartFile image, MultipartFile miniImage,HttpServletRequest request) {
+
         userService.updateUserImage(image, miniImage);
     }
 
@@ -130,14 +126,14 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    User getUserProfile(@PathVariable String username, HttpServletResponse response) throws IOException {
-        Response res = userService.getUserProfile(username);
+    UserProfileRelationalDto getUserProfileRelationalData(@PathVariable String username, HttpServletResponse response) throws IOException {
+        Response res = userService.getUserProfileRelationalData(username);
         if (res.isContainsError()) {
             response.sendError(res.getCode(), res.getError());
         }
 //        System.out.println(res.getData());
 
-        return (User) res.getData();
+        return (UserProfileRelationalDto) res.getData();
     }
 
     @PostMapping("/{username}/follow")

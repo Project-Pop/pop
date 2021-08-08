@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import javax.print.attribute.standard.Media;
 import java.util.UUID;
 
-@Component
 public class MediaFilenameBuilder {
 
     @Value("${application.mediaUrl.basePrefix}")

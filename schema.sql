@@ -12,7 +12,7 @@ CREATE TABLE Users (
 );
 CREATE TABLE UserProfile(
 	username VARCHAR(25) PRIMARY KEY,
-    imageUrl VARCHAR(100),
+    imageUrl VARCHAR(300),
     views int default 0,
     reacts int default 0,
     popScore int default 0,
@@ -24,10 +24,11 @@ CREATE TABLE UserProfile(
 
 CREATE TABLE Posts(
 	postId CHAR(36) PRIMARY KEY,
-    imageUrl varchar(100),
+    imageUrl varchar(300),
+    description varchar(1000),
     username VARCHAR(25),
     views INT DEFAULT 0,
-    timeStamp date,
+    timestamp date,
 	FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
     INDEX (username)
 );

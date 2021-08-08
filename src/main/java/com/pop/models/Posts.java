@@ -24,20 +24,20 @@ public class Posts {
 	List<Tagged> taggedUsers;
 
 	int views;
-	Date timeStamp;
+	Date timestamp;
 	int likeCount = 0;
 
-	public Posts(String postId, @NotNull String imageUrl, @NotNull String username, String description, int views, Date timeStamp, int likeCount) {
+	public Posts(String postId, @NotNull String imageUrl, @NotNull String username, String description, int views, Date timestamp, int likeCount) {
 		super();
 		this.postId = postId;
 		this.imageUrl = imageUrl;
 		this.username = username;
 		this.description  = description;
 		this.views = views;
-		this.timeStamp = timeStamp;
+		this.timestamp = timestamp;
 		this.likeCount = likeCount;
 	}
-	
+
 
 	public int getLikeCount() {
 		return likeCount;
@@ -85,11 +85,11 @@ public class Posts {
 	public void setViews(int views) {
 		this.views = views;
 	}
-	public Date getTimeStamp() {
-		return timeStamp;
+	public Date getTimestamp() {
+		return timestamp;
 	}
-	public void setTimeStamp(Date timeStamp) {
-		this.timeStamp = timeStamp;
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 	
 	public List<Reactions> getReactions() {

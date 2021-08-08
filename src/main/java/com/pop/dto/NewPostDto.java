@@ -11,6 +11,9 @@ public class NewPostDto {
         this.taggedUsers = taggedUsers;
     }
 
+    public NewPostDto() {
+    }
+
     public String getDescription() {
         return description;
     }

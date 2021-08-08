@@ -1,5 +1,6 @@
 package com.pop.controller;
 
+import com.google.gson.Gson;
 import com.pop.common.Response;
 import com.pop.dto.*;
 import com.pop.models.Comments;
@@ -34,17 +35,24 @@ public class PostController {
     }
 
     @ApiOperation(value = "Create a new post", response = NewPostDto.class)
-    @PostMapping("/")
-    public NewPostDto postPost(@RequestBody NewPostDto newPostDto, MultipartFile image, MultipartFile miniImage, HttpServletResponse response) throws IOException {
+    @PostMapping(value = "/",consumes = "multipart/form-data")
+    public Posts postPost(
+            @RequestPart("post") String newPostString,
+             MultipartFile hdVideo,
+             MultipartFile thumbVideo,
+            HttpServletResponse response) throws IOException {
 
-        Response res = postService.createPost(newPostDto, image, miniImage);
+     var newPostDto =    new Gson().fromJson(newPostString,NewPostDto.class);
+
+
+        Response res = postService.createPost(newPostDto, hdVideo, thumbVideo);
         if (res.isContainsError()) {
             response.sendError(res.getCode(), res.getError());
         } else {
             response.setStatus(res.getCode());
         }
 
-        return (NewPostDto) res.getData();
+        return (Posts) res.getData();
     }
 
     @ApiOperation(value = "Fetch personalized home feed of user", response = Iterable.class)

@@ -9,7 +9,7 @@ public interface PostService {
 
 //    public Response getGlobalFeed();
 
-    public Response createPost(NewPostDto newPostDto, MultipartFile normalImage, MultipartFile miniImage);
+    public Response createPost(NewPostDto newPostDto, MultipartFile hdVideo, MultipartFile thumbVideo);
 
     public Response getHomeFeed();
 
